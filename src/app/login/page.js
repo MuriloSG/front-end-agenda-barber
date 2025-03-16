@@ -21,7 +21,7 @@ import Image from "next/image";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // Estado para erro
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
