@@ -31,12 +31,20 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  const router = useRouter();
   async function onSubmit(data) {
     setLoading(true);
     setErrorMessage(""); 
 
     try {
       const response = await loginUser(data);
+      const { user } = response;
+      if (user.profile_type === "barbeiro") {
+        router.push("/dashboard/barbers");
+      }
+      else {
+        router.push("/dashboard/customers");
+      }
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
