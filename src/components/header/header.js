@@ -88,7 +88,7 @@ export function Header() {
                     variant="ghost"
                     className="w-full text-gray-300 hover:text-white"
                   >
-                    Login
+                    Entrar
                   </Button>
                 </Link>
                 <Link href="/register" className="block">
