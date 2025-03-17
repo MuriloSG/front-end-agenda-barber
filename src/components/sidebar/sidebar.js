@@ -1,94 +1,138 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { DialogTitle } from "@/components/ui/dialog";
+import { Menu, Scissors, Calendar, Users, Home } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import Image from "next/image";
 
-export function Sidebar({ userType }) {
-  const pathname = usePathname();
+export function Sidebar({ userType, className }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const menuItems =
     userType === "barbeiro"
       ? [
-          { label: "Meus Serviços", path: "/dashboard/barbers/services" },
+          { name: "Início", icon: Home, href: "/dashboard/barbers/" },
           {
-            label: "Confirmar/Cancelar Agendamentos",
-            path: "/dashboard/barbers/appointment/confirm-cancel",
+            name: "Meus Serviços",
+            icon: Scissors,
+            href: "/dashboard/barbers/services",
           },
           {
-            label: "Dias de Trabalho",
-            path: "/dashboard/barbers/work-days",
+            name: "Dias de Trabalho",
+            icon: Calendar,
+            href: "/dashboard/barbers/work-days",
           },
-          { label: "Perfil", path: "/dashboard/barbers/profile" },
+          {
+            name: "Confirmar/Cancelar Agendamentos",
+            icon: Calendar,
+            href: "/dashboard/barbers/appointment/confirm-cancel",
+          },
+          { name: "Perfil", icon: Users, href: "/dashboard/barbers/profile" },
         ]
       : [
-          { label: "Agendar", path: "/dashboard/customers/appointment/novo" },
           {
-            label: "Meus Agendamentos",
-            path: "/dashboard/customers/appointment",
+            name: "Agendar",
+            icon: Calendar,
+            href: "/dashboard/customers/appointment/novo",
           },
-          { label: "Perfil", path: "/dashboard/customers/profile" },
+          {
+            name: "Meus Agendamentos",
+            icon: Calendar,
+            href: "/dashboard/customers/appointment",
+          },
+          { name: "Perfil", icon: Users, href: "/dashboard/customers/profile" },
         ];
 
   return (
     <>
-      <aside className="hidden md:flex w-64 bg-gray-900 text-white h-screen p-4 flex-col">
-        <h2 className="text-xl font-bold mb-4">Agenda Barber</h2>
-        <nav>
-          <ul>
-            {menuItems.map((item) => (
-              <li
-                key={item.path}
-                className={`p-2 rounded ${
-                  pathname === item.path ? "bg-gray-700" : ""
-                }`}
-              >
-                <Link href={item.path}>
-                  {item.label || "Sem título"} 
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </aside>
-
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
-            className="md:hidden absolute top-4 left-4"
+            className="md:hidden fixed left-4 top-4 z-40"
           >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-4 w-4" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="bg-gray-900 text-white">
-          <h2 className="text-xl font-bold mb-4">
-            {userType === "barbeiro" ? "Barbeiro" : "Cliente"}
-          </h2>
-          <nav>
-            <ul>
-              {menuItems.map((item) => (
-                <li
-                  key={item.path}
-                  className={`p-2 rounded ${
-                    pathname === item.path ? "bg-gray-700" : ""
-                  }`}
-                >
-                  <Link href={item.path} onClick={() => setOpen(false)}>
-                    {item.label || "Sem título"} {/* Valor padrão */}
+        <SheetContent side="left" className="w-[240px] p-0">
+          <DialogTitle className="sr-only">Menu</DialogTitle>
+          <div className="h-full border-r bg-[#112240]">
+            <div className="flex h-16 items-center border-b px-6">
+              <Image
+                src="/logoAgendaBarber.webp"
+                alt="Logo da Barbearia"
+                width={50}
+                height={20}
+                className="object-contain"
+              />
+              <span className="ml-2 text-sm font-semibold text-white">
+                Agenda Barber
+              </span>
+            </div>
+            <ScrollArea className="h-full py-4">
+              <nav className="grid gap-1 px-2">
+                {menuItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-white hover:bg-accent hover:text-accent-foreground",
+                      pathname === item.href
+                        ? "bg-primary text-primary-foreground"
+                        : "transparent"
+                    )}
+                  >
+                    <item.icon className="h-4 w-4 text-white" />
+                    {item.name}
                   </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+                ))}
+              </nav>
+            </ScrollArea>
+          </div>
         </SheetContent>
       </Sheet>
+      <div className={cn("hidden border-r bg-[#112240] md:block", className)}>
+        <div className="flex h-16 items-center border-b px-6">
+          <Image
+            src="/logoAgendaBarber.webp"
+            alt="Logo da Barbearia"
+            width={60}
+            height={20}
+            className="object-contain"
+          />
+          <span className="ml-2 text-lg font-semibold text-white">
+            Agenda Barber
+          </span>
+        </div>
+        <ScrollArea className="h-[calc(100vh-4rem)] py-4">
+          <nav className="grid gap-1 px-2">
+            {menuItems.map((item, index) => (
+              <Link
+                key={index}
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-white hover:bg-accent hover:text-accent-foreground",
+                  pathname === item.href
+                    ? "bg-primary text-primary-foreground"
+                    : "transparent"
+                )}
+              >
+                <item.icon className="h-4 w-4 text-white" />{" "}
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+        </ScrollArea>
+      </div>
     </>
   );
 }
-
