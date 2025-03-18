@@ -28,7 +28,11 @@ export async function registerUser(data) {
   });
   const result = await response.json();
   if (!response.ok) {
-    throw new Error(result.non_field_errors ? result.non_field_errors.join(', ') : 'Erro desconhecido');
+    throw new Error(
+      result.non_field_errors
+        ? result.non_field_errors.join(", ")
+        : "Erro desconhecido"
+    );
   }
   Cookies.set("token", result.token, { expires: 7 });
   Cookies.set("user", JSON.stringify(result.user), { expires: 7 });

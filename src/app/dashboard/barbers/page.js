@@ -1,12 +1,19 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, TrendingUp, CheckCircle2, XCircle, Clock } from "lucide-react";
+import {
+  Calendar,
+  TrendingUp,
+  CheckCircle2,
+  XCircle,
+  Clock,
+} from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
-import { cn } from "@/lib/utils"; 
-import { getBarberStatistics } from "@/lib/api/barber"
+import { cn } from "@/lib/utils";
+import { getBarberStatistics } from "@/lib/api/barber";
 import { Skeleton } from "@/components/skeletonDashboarbBarber/skeleton";
 import { ErrorMesage } from "@/components/errorMessage/errorMessage";
+
 export default function BarbersDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [statistic, setStatistic] = useState(null);
@@ -15,8 +22,8 @@ export default function BarbersDashboard() {
     const fetchData = async () => {
       try {
         const data = await getBarberStatistics();
-        setStatistic(data); 
-        setIsLoading(false); 
+        setStatistic(data);
+        setIsLoading(false);
       } catch (error) {
         console.log("Erro ao carregar os dados: ", error);
         setIsLoading(false);
@@ -26,14 +33,16 @@ export default function BarbersDashboard() {
   }, []);
 
   if (isLoading) {
-    return <Skeleton/>
+    return <Skeleton />;
   }
 
   if (!statistic) {
-    return (<ErrorMesage
-      title="Algo deu errado"
-      description="Não conseguimos carregar os dados no momento. Tente novamente mais"
-    />)
+    return (
+      <ErrorMesage
+        title="Algo deu errado"
+        description="Não conseguimos carregar os dados no momento. Tente novamente mais"
+      />
+    );
   }
 
   return (
