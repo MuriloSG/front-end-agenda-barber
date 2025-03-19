@@ -125,14 +125,15 @@ export default function ServicesPage() {
                   {formatCurrency(service.price)}
                 </span>
                 <div className="flex gap-2">
-                  <Button
+                  <Link
+                    href={`/dashboard/barbers/services/edit/${service.id}`}
                     variant="outline"
                     size="icon"
                     onClick={() => handleEdit(index)}
-                    className="h-8 w-8"
+                    className="h-8 w-8 flex items-center justify-center bg-green-500 text-white hover:bg-green-600 rounded-md"
                   >
                     <Pencil className="h-4 w-4" />
-                  </Button>
+                  </Link>
                   <Button
                     variant="destructive"
                     size="icon"

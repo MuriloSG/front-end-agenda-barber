@@ -89,7 +89,7 @@ export default function RegisterPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="email@email.com"
+                placeholder="email"
                 {...register("email")}
               />
               {errors.email && (
@@ -101,7 +101,7 @@ export default function RegisterPage() {
               <Input
                 id="phone"
                 type="tel"
-                placeholder="(11) 99999-9999"
+                placeholder="11999999999"
                 {...register("phone")}
               />
               {errors.phone && (
@@ -113,7 +113,7 @@ export default function RegisterPage() {
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="senha"
                 {...register("password")}
               />
               {errors.password && (
