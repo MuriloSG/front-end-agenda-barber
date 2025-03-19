@@ -41,10 +41,6 @@ export default function ServicesPage() {
     fetchServices();
   }, []);
 
-  const handleEdit = (index) => {
-    console.log("Edit service:", services[index]);
-  };
-
   const handleDelete = async (serviceId, index) => {
     const result = await Swal.fire({
       title: "Tem certeza que vai deletar esse Serviço?",
