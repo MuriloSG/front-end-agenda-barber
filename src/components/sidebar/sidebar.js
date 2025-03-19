@@ -27,12 +27,12 @@ export function Sidebar({ userType, className }) {
           {
             name: "Dias de Trabalho",
             icon: Calendar,
-            href: "/dashboard/barbers/work-days",
+            href: "/dashboard/barbers/work_days",
           },
           {
             name: "Confirmar/Cancelar Agendamentos",
             icon: Calendar,
-            href: "/dashboard/barbers/appointment/confirm-cancel",
+            href: "/dashboard/barbers/appointment/confirm_cancel",
           },
           { name: "Perfil", icon: Users, href: "/dashboard/barbers/profile" },
         ]

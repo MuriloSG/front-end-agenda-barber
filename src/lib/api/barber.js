@@ -65,7 +65,7 @@ export async function getServiceById(serviceId) {
 }
 
 export async function createService(data) {
-  console.log(data)
+  console.log(data);
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
     throw new Error("Token não encontrado nos cookies");
@@ -134,4 +134,24 @@ export async function deleteService(serviceId) {
   }
 
   return { message: "Serviço deletado com sucesso!" };
+}
+
+export async function getBarberWorkDays() {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/schedule/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.non_field_errors);
+  }
+  return result;
 }
