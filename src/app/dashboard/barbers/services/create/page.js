@@ -46,20 +46,20 @@ export default function Create() {
       router.push("/dashboard/barbers/services");
     } catch (error) {
       setErrorMessage(error.message);
-      toast.error(`Erro: ${error.message}`); 
+      toast.error(`Erro: ${error.message}`);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-   const handleCancel = () => {
-     router.push("/dashboard/barbers/services");
-   };
+  const handleCancel = () => {
+    router.push("/dashboard/barbers/services");
+  };
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
-      setImagePreview(URL.createObjectURL(file)); 
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 

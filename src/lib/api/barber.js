@@ -155,3 +155,33 @@ export async function getBarberWorkDays() {
   }
   return result;
 }
+
+export async function createWorkDay(data) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/schedule/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await response.json();
+  console.log(result)
+
+  if (!response.ok) {
+    const errorMessage = 
+      result.detail ||
+      result.non_field_errors?.join(", ") ||
+      Object.values(result).flat().join(", ")
+    
+    throw new Error(errorMessage);
+  }
+
+  return result;
+}

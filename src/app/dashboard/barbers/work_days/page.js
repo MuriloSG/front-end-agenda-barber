@@ -49,7 +49,7 @@ export default function BarberSchedule() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <h1 className="text-xl font-bold md:text-3xl">Dias de trabalho</h1>
         <Link
-          href="/dashboard/barbers/services/create"
+          href="/dashboard/barbers/work_days/create"
           className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm md:text-base"
         >
           <Plus className="h-5 w-5 md:h-6 md:w-6" />
