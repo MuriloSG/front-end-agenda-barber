@@ -156,6 +156,29 @@ export async function getBarberWorkDays() {
   return result;
 }
 
+export async function getWorkDay(work_day_id) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/schedule/${work_day_id}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.non_field_errors || "Erro ao buscar o serviço");
+  }
+
+  return result;
+}
+
 export async function createWorkDay(data) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -172,16 +195,59 @@ export async function createWorkDay(data) {
   });
 
   const result = await response.json();
-  console.log(result)
 
   if (!response.ok) {
-    const errorMessage = 
+    const errorMessage =
       result.detail ||
       result.non_field_errors?.join(", ") ||
-      Object.values(result).flat().join(", ")
-    
+      Object.values(result).flat().join(", ");
+
     throw new Error(errorMessage);
   }
 
   return result;
+}
+
+export async function updateWorkDay(work_day_id, data) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) throw new Error("Token não encontrado");
+
+  const response = await fetch(`${API_URL}/schedule/${work_day_id}/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    const errorMessage =
+      result.day_of_week?.[0] || result.detail || "Erro desconhecido";
+    throw new Error(errorMessage);
+  }
+  return result;
+}
+
+export async function deleteWorkDay(work_day_id) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/schedule/${work_day_id}/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+  });
+
+  if (!response.ok) {
+    const result = await response.json();
+    throw new Error(result.non_field_errors || "Erro ao deletar o serviço");
+  }
+
+  return { message: "Serviço deletado com sucesso!" };
 }

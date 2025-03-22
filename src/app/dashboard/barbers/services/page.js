@@ -81,7 +81,7 @@ export default function ServicesPage() {
 
   return (
     <div className="space-y-6 mt-10">
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex items-center justify-between flex-wrap gap-4 ">
         <h1 className="text-xl font-bold md:text-3xl">Serviços</h1>
         <Link
           href="/dashboard/barbers/services/create"
@@ -125,7 +125,6 @@ export default function ServicesPage() {
                     href={`/dashboard/barbers/services/edit/${service.id}`}
                     variant="outline"
                     size="icon"
-                    onClick={() => handleEdit(index)}
                     className="h-8 w-8 flex items-center justify-center bg-green-500 text-white hover:bg-green-600 rounded-md"
                   >
                     <Pencil className="h-4 w-4" />

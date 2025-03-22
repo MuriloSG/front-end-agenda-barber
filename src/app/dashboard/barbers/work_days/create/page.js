@@ -19,7 +19,7 @@ const daysOfWeek = [
   { value: "saturday", label: "Sábado" },
 ];
 
-export default function CreateWorkDayPage() {
+export default function Create() {
   const {
     register,
     handleSubmit,

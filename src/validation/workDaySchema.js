@@ -37,15 +37,41 @@ export const workDaySchema = z.object({
     }),
   slot_duration: z
     .string()
-    .min(1, "Informe a duração do atendimento") 
+    .min(1, "Informe a duração do atendimento")
     .refine((val) => !isNaN(Number(val)), {
       message: "A duração deve ser um número",
     })
-    .transform((val) => Number(val)) 
+    .transform((val) => Number(val))
     .pipe(
       z
         .number()
         .int("A duração deve ser um número inteiro, exemplo 1")
+        .min(5, { message: "A duração mínima é de 5 minutos" })
     ),
 });
 
+export const workDaySchemaUpdate = z.object({
+  start_time: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, {
+    message: "Horário inválido. Use o formato HH:MM:SS",
+  }),
+  end_time: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, {
+    message: "Horário inválido. Use o formato HH:MM:SS",
+  }),
+  lunch_start_time: z
+    .string()
+    .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, {
+      message: "Horário inválido. Use o formato HH:MM:SS",
+    }),
+  lunch_end_time: z
+    .string()
+    .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, {
+      message: "Horário inválido. Use o formato HH:MM:SS",
+    }),
+  slot_duration: z.coerce
+    .number({
+      invalid_type_error: "A duração deve ser um número",
+      required_error: "Informe a duração do atendimento",
+    })
+    .int("A duração deve ser um número inteiro, exemplo 1")
+    .min(5, { message: "A duração mínima é de 5 minutos" }),
+});
