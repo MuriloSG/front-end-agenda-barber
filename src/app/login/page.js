@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,19 @@ export default function LoginPage() {
   });
 
   const router = useRouter();
+  useEffect(() => {
+    const token = Cookies.get("token");
+    const user = Cookies.get("user");
+
+    if (token && user) {
+      const parsedUser = JSON.parse(user);
+      const dashboardRoute =
+        parsedUser.profile_type === "barbeiro"
+          ? "/dashboard/barbers"
+          : "/dashboard/customers";
+      router.replace(dashboardRoute);
+    }
+  });
   async function onSubmit(data) {
     setLoading(true);
     setErrorMessage(""); 

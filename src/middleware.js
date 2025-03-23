@@ -5,18 +5,10 @@ export function middleware(req) {
   const userCookie = req.cookies.get("user");
 
   if (!token || !userCookie) {
-    return NextResponse.next();
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   const user = JSON.parse(userCookie.value);
-
-  if (req.url.includes("/login") || req.url.includes("/register")) {
-    const dashboardRoute =
-      user.profile_type === "barbeiro"
-        ? "/dashboard/barbers"
-        : "/dashboard/customers";
-    return NextResponse.redirect(new URL(dashboardRoute, req.url));
-  }
 
   if (
     user.profile_type === "barbeiro" &&
@@ -36,10 +28,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: [
-    "/dashboard/barbers/:path*",
-    "/dashboard/customers/:path*",
-    "/login",
-    "/register",
-  ],
+  matcher: ["/dashboard/barbers/:path*", "/dashboard/customers/:path*"],
 };
