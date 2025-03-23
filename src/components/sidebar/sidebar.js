@@ -32,7 +32,7 @@ export function Sidebar({ userType, className }) {
           {
             name: "Confirmar/Cancelar Agendamentos",
             icon: Calendar,
-            href: "/dashboard/barbers/appointment/confirm_cancel",
+            href: "/dashboard/barbers/appointments",
           },
           { name: "Perfil", icon: Users, href: "/dashboard/barbers/profile" },
         ]

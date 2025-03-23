@@ -258,7 +258,8 @@ export async function reactivateAllSlotsWorkDay(work_day_id) {
     throw new Error("Token não encontrado nos cookies");
   }
 
-  const response = await fetch(`${API_URL}/schedule/generate-slots/${work_day_id}/`,
+  const response = await fetch(
+    `${API_URL}/schedule/generate-slots/${work_day_id}/`,
     {
       method: "POST",
       headers: {
@@ -281,7 +282,8 @@ export async function deactivateAllSlotsWorkDay(work_day_id) {
     throw new Error("Token não encontrado nos cookies");
   }
 
-  const response = await fetch(`${API_URL}/schedule/delete-slots/${work_day_id}/`,
+  const response = await fetch(
+    `${API_URL}/schedule/delete-slots/${work_day_id}/`,
     {
       method: "DELETE",
       headers: {
@@ -295,5 +297,36 @@ export async function deactivateAllSlotsWorkDay(work_day_id) {
   if (!response.ok) {
     throw new Error(result.detail || "Erro ao desativar horários");
   }
+  return result;
+}
+
+export async function getBarberAppointments(status, clientName) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+  const url = new URL(`${API_URL}/appointments/barber/appointments/`);
+  const params = new URLSearchParams();
+  if (status) params.append("status", status);
+  if (clientName) params.append("client_name", clientName);
+  url.search = params.toString();
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    const errorMessage =
+      result.detail ||
+      result.non_field_errors?.join(", ") ||
+      "Erro ao buscar agendamentos";
+    throw new Error(errorMessage);
+  }
+
   return result;
 }
