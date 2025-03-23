@@ -302,6 +302,28 @@ export async function deleteWorkDay(work_day_id) {
   return { message: "Serviço deletado com sucesso!" };
 }
 
+export async function getSlotsWorkDay(work_day_id) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/schedule/available-time-slot/${work_day_id}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.non_field_errors || "Erro ao buscar o serviço");
+  }
+
+  return result;
+}
+
 export async function reactivateAllSlotsWorkDay(work_day_id) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -348,6 +370,28 @@ export async function deactivateAllSlotsWorkDay(work_day_id) {
     throw new Error(result.detail || "Erro ao desativar horários");
   }
   return result;
+}
+
+export async function deleteSlotsWorkDay(work_day_id) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/schedule/delete-time-slot/${work_day_id}/`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${TOKEN}`,
+      },
+    }
+  );
+  if (response.ok) {
+    return { success: true };
+  }
+  const result = await response.json();
+  throw new Error(result.non_field_errors);
 }
 
 export async function getBarberAppointments(status, clientName, day) {

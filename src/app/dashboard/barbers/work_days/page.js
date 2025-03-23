@@ -1,9 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { CalendarPlus, Pencil, Trash2, Clock, Plus, Eye, Trash } from "lucide-react";
+import {
+  CalendarPlus,
+  Pencil,
+  Trash2,
+  Clock,
+  Plus,
+  Eye,
+  Trash,
+} from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/skeletonWorkDay/skeleton";
 import { ErrorMesage } from "@/components/errorMessage/errorMessage";
@@ -14,12 +23,12 @@ import {
   deactivateAllSlotsWorkDay,
 } from "@/lib/api/barber";
 import { toast } from "sonner";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 
 export default function BarberSchedule() {
   const [workDays, setWorkDays] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter()
   const fetchWorkDays = async () => {
     setIsLoading(true);
     try {
@@ -111,6 +120,10 @@ export default function BarberSchedule() {
         }
       },
     });
+  };
+
+  const handleView = (id) => {
+    router.push(`/dashboard/barbers/times/${id}/`);
   };
 
   if (isLoading) {
