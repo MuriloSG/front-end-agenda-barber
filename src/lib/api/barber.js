@@ -1,6 +1,57 @@
 import Cookies from "js-cookie";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export async function getBarberProfile() {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/auth/profile/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    const errorMessage =
+      result.detail ||
+      result.non_field_errors?.join(", ") ||
+      "Erro ao obter perfil do barbeiro";
+    throw new Error(errorMessage);
+  }
+
+  return result;
+}
+
+export async function updateBarberProfile(data) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/auth/profile/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Token ${TOKEN}`,
+    },
+    body: data,
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(
+      result.non_field_errors
+        ? result.non_field_errors.join(", ")
+        : "Erro desconhecido"
+    );
+  }
+  return result;
+}
+
 export async function getBarberStatistics() {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -65,7 +116,6 @@ export async function getServiceById(serviceId) {
 }
 
 export async function createService(data) {
-  console.log(data);
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
     throw new Error("Token não encontrado nos cookies");
