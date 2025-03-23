@@ -38,3 +38,21 @@ export async function registerUser(data) {
   Cookies.set("user", JSON.stringify(result.user), { expires: 7 });
   return result;
 }
+
+export async function logoutUser() {
+  const TOKEN = Cookies.get("token");
+  const response = await fetch(`${API_URL}/auth/logout/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.non_field_errors);
+  }
+  Cookies.remove("token");
+  Cookies.remove("user");
+  return result;
+}

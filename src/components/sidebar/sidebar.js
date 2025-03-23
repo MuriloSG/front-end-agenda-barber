@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DialogTitle } from "@/components/ui/dialog";
-import { Menu, Scissors, Calendar, Users, Home } from "lucide-react";
+import { Menu, Scissors, Calendar, Users, Home, LogOut } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { toast } from "sonner";
+import Swal from "sweetalert2"; 
+import { logoutUser } from "@/lib/api/auth";
 
 export function Sidebar({ userType, className }) {
   const [open, setOpen] = useState(false);
@@ -49,6 +52,31 @@ export function Sidebar({ userType, className }) {
           },
           { name: "Perfil", icon: Users, href: "/dashboard/customers/profile" },
         ];
+
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "Tem certeza que vai sair?",
+      text: "Você não poderá reverter essa ação!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sim, sair!",
+      cancelButtonText: "Cancelar",
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false, 
+      allowEscapeKey: false,
+      preConfirm: async () => {
+        try {
+          const response = await logoutUser();
+          window.location.reload();
+          toast.success("Você saiu da sua conta!");
+          return true;
+        } catch (error) {
+          toast.error("Erro ao sair da conta!");
+          return false;
+        }
+      },
+    });
+  };
 
   return (
     <>
@@ -95,6 +123,19 @@ export function Sidebar({ userType, className }) {
                     {item.name}
                   </Link>
                 ))}
+                <Link
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogout();
+                  }}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-white hover:bg-accent hover:text-accent-foreground"
+                  )}
+                >
+                  <LogOut className="h-4 w-4 text-white" />
+                  Sair
+                </Link>
               </nav>
             </ScrollArea>
           </div>
@@ -126,10 +167,22 @@ export function Sidebar({ userType, className }) {
                     : "transparent"
                 )}
               >
-                <item.icon className="h-4 w-4 text-white" />{" "}
-                {item.name}
+                <item.icon className="h-4 w-4 text-white" /> {item.name}
               </Link>
             ))}
+            <Link
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-white hover:bg-accent hover:text-accent-foreground"
+              )}
+            >
+              <LogOut className="h-4 w-4 text-white" />
+              Sair
+            </Link>
           </nav>
         </ScrollArea>
       </div>
