@@ -130,7 +130,7 @@ export default function RegisterPage() {
                   control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger>
+                      <SelectTrigger className="sm:max-w-[130px]">
                         <SelectValue placeholder="Selecionar perfil" />
                       </SelectTrigger>
                       <SelectContent>
@@ -154,7 +154,7 @@ export default function RegisterPage() {
                   control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger>
+                      <SelectTrigger className=" sm:max-w-[130px]">
                         <SelectValue placeholder="Selecionar cidade" />
                       </SelectTrigger>
                       <SelectContent>
@@ -164,9 +164,7 @@ export default function RegisterPage() {
                   )}
                 />
                 {errors.city && (
-                  <p className="text-red-500 text-sm">
-                    {errors.city.message}
-                  </p>
+                  <p className="text-red-500 text-sm">{errors.city.message}</p>
                 )}
               </div>
             </div>
