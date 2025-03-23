@@ -300,7 +300,7 @@ export async function deactivateAllSlotsWorkDay(work_day_id) {
   return result;
 }
 
-export async function getBarberAppointments(status, clientName) {
+export async function getBarberAppointments(status, clientName, day) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
     throw new Error("Token não encontrado nos cookies");
@@ -309,6 +309,7 @@ export async function getBarberAppointments(status, clientName) {
   const params = new URLSearchParams();
   if (status) params.append("status", status);
   if (clientName) params.append("client_name", clientName);
+  if (day) params.append("day", day);
   url.search = params.toString();
   const response = await fetch(url, {
     method: "GET",
@@ -325,6 +326,66 @@ export async function getBarberAppointments(status, clientName) {
       result.detail ||
       result.non_field_errors?.join(", ") ||
       "Erro ao buscar agendamentos";
+    throw new Error(errorMessage);
+  }
+
+  return result;
+}
+
+export async function confirmAppointment(appointmentId) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(
+    `${API_URL}/appointments/confirm/${appointmentId}/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${TOKEN}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    const errorMessage =
+      result.detail ||
+      result.non_field_errors?.join(", ") ||
+      "Erro ao confirmar o agendamento";
+    throw new Error(errorMessage);
+  }
+
+  return result;
+}
+
+export async function cancelAppointment(appointmentId) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(
+    `${API_URL}/appointments/cancel/${appointmentId}/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${TOKEN}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    const errorMessage =
+      result.detail ||
+      result.non_field_errors?.join(", ") ||
+      "Erro ao cancelar o agendamento";
     throw new Error(errorMessage);
   }
 

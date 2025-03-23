@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CheckCircle, XCircle, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,72 +25,117 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn, formatCurrency, formatTime } from "@/lib/utils";
-import { getBarberAppointments } from "@/lib/api/barber";
+import {
+  getBarberAppointments,
+  confirmAppointment,
+  cancelAppointment,
+} from "@/lib/api/barber";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 const statusOptions = [
-  { value: "all", label: "Todos" },
+  { value: "all", label: "Todos os status" },
   { value: "pending", label: "Pendente" },
   { value: "confirmed", label: "Confirmado" },
   { value: "canceled", label: "Cancelado" },
 ];
 
+const daysOptions = [
+  { value: "all", label: "Todos os dias" },
+  { value: "monday", label: "Segunda-feira" },
+  { value: "tuesday", label: "Terça-feira" },
+  { value: "wednesday", label: "Quarta-feira" },
+  { value: "thursday", label: "Quinta-feira" },
+  { value: "friday", label: "Sexta-feira" },
+  { value: "saturday", label: "Sábado" },
+  { value: "sunday", label: "Domingo" },
+];
+
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filters, setFilters] = useState({ status: "all", clientName: "" });
+  const [filters, setFilters] = useState({
+    status: "all",
+    clientName: "",
+    day: "all",
+  });
   const [filterInputs, setFilterInputs] = useState({
     status: "all",
     clientName: "",
+    day: "all",
   });
   const [error, setError] = useState(null);
   const [expandedRows, setExpandedRows] = useState(new Set());
 
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const data = await getBarberAppointments(
-          filters.status === "all" ? null : filters.status,
-          filters.clientName || ""
-        );
-        setAppointments(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAppointments();
+  const fetchAppointments = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await getBarberAppointments(
+        filters.status === "all" ? null : filters.status,
+        filters.clientName || "",
+        filters.day === "all" ? null : filters.day
+      );
+      setAppointments(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   }, [filters]);
 
+  useEffect(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
+
   const handleConfirm = async (id) => {
-    try {
-      setAppointments(
-        appointments.map((appointment) =>
-          appointment.id === id
-            ? { ...appointment, status: "confirmed" }
-            : appointment
-        )
-      );
-    } catch (error) {
-      console.error("Erro ao confirmar agendamento:", error);
-    }
+    const result = await Swal.fire({
+      title: "Confirmar agendamento?",
+      text: "Deseja confirmar este agendamento?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sim, confirmar!",
+      cancelButtonText: "Cancelar",
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      preConfirm: async () => {
+        try {
+          const response = await confirmAppointment(id);
+          await fetchAppointments();
+          toast.success("Agendamento confirmado com sucesso!");
+          return true;
+        } catch (error) {
+          toast.error("Erro ao confirmar agendamento!");
+          return false;
+        }
+      },
+    });
   };
 
   const handleCancel = async (id) => {
-    try {
-      setAppointments(
-        appointments.map((appointment) =>
-          appointment.id === id
-            ? { ...appointment, status: "canceled" }
-            : appointment
-        )
-      );
-    } catch (error) {
-      console.error("Erro ao cancelar agendamento:", error);
-    }
+    const result = await Swal.fire({
+      title: "Cancelar agendamento?",
+      text: "Esta ação não pode ser desfeita!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sim, cancelar!",
+      cancelButtonText: "Voltar",
+      confirmButtonColor: "#dc2626",
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      preConfirm: async () => {
+        try {
+          const response = await cancelAppointment(id);
+          await fetchAppointments();
+          toast.success("Agendamento cancelado com sucesso!");
+          return true;
+        } catch (error) {
+          toast.error("Erro ao cancelar agendamento!");
+          return false;
+        }
+      },
+    });
   };
 
   const toggleRow = (id) => {
@@ -110,8 +155,8 @@ export default function AppointmentsPage() {
   };
 
   const clearFilters = () => {
-    setFilterInputs({ status: "all", clientName: "" });
-    setFilters({ status: "all", clientName: "" });
+    setFilterInputs({ status: "all", clientName: "", day: "all" });
+    setFilters({ status: "all", clientName: "", day: "all" });
   };
 
   const getStatusBadge = (status) => (
@@ -149,6 +194,23 @@ export default function AppointmentsPage() {
             ))}
           </SelectContent>
         </Select>
+        <Select
+          value={filterInputs.day}
+          onValueChange={(value) =>
+            setFilterInputs({ ...filterInputs, day: value })
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Dia da semana" />
+          </SelectTrigger>
+          <SelectContent>
+            {daysOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         <Input
           placeholder="Nome do cliente"
@@ -163,7 +225,9 @@ export default function AppointmentsPage() {
           <Button onClick={applyFilters} className="flex-1">
             Filtrar
           </Button>
-          {(filters.status !== "all" || filters.clientName) && (
+          {(filters.status !== "all" ||
+            filters.clientName ||
+            filters.day !== "all") && (
             <Button variant="outline" onClick={clearFilters}>
               Limpar
             </Button>
@@ -183,6 +247,7 @@ export default function AppointmentsPage() {
             <TableRow>
               <TableHead>Cliente</TableHead>
               <TableHead>Serviço</TableHead>
+              <TableHead>Dia</TableHead>
               <TableHead>Horário</TableHead>
               <TableHead>Valor</TableHead>
               <TableHead>Status</TableHead>
@@ -192,13 +257,13 @@ export default function AppointmentsPage() {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center">
+                <TableCell colSpan={7} className="text-center">
                   Carregando agendamentos...
                 </TableCell>
               </TableRow>
             ) : appointments.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center">
+                <TableCell colSpan={7} className="text-center">
                   Nenhum agendamento encontrado
                 </TableCell>
               </TableRow>
@@ -212,21 +277,26 @@ export default function AppointmentsPage() {
                   </TableCell>
                   <TableCell>{appointment.service.name}</TableCell>
                   <TableCell>
+                    {appointment.day_of_week || "Não informado"}
+                  </TableCell>
+                  <TableCell>
                     {formatTime(appointment.time_slot?.time)}h
                   </TableCell>
                   <TableCell>{formatCurrency(appointment.price)}</TableCell>
                   <TableCell>{getStatusBadge(appointment.status)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 w-8 p-0 text-green-600 hover:text-green-700"
-                        onClick={() => handleConfirm(appointment.id)}
-                        disabled={appointment.status === "confirmed"}
-                      >
-                        <CheckCircle className="h-4 w-4" />
-                      </Button>
+                      {appointment.status !== "canceled" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 w-8 p-0 text-green-600 hover:text-green-700"
+                          onClick={() => handleConfirm(appointment.id)}
+                          disabled={appointment.status === "confirmed"}
+                        >
+                          <CheckCircle className="h-4 w-4" />
+                        </Button>
+                      )}
                       <Button
                         size="sm"
                         variant="outline"
@@ -284,6 +354,10 @@ export default function AppointmentsPage() {
               <CollapsibleContent>
                 <div className="px-4 pb-4 space-y-3 border-t pt-3">
                   <div className="flex justify-between">
+                    <span className="text-sm text-muted-foreground">Dia:</span>
+                    <span>{appointment.day_of_week || "Não informado"}</span>
+                  </div>
+                  <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
                       Serviço:
                     </span>
@@ -296,16 +370,18 @@ export default function AppointmentsPage() {
                     <span>{formatCurrency(appointment.price)}</span>
                   </div>
                   <div className="flex gap-2 justify-end mt-4">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-green-600"
-                      onClick={() => handleConfirm(appointment.id)}
-                      disabled={appointment.status === "confirmed"}
-                    >
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Confirmar
-                    </Button>
+                    {appointment.status !== "canceled" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-green-600"
+                        onClick={() => handleConfirm(appointment.id)}
+                        disabled={appointment.status === "confirmed"}
+                      >
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Confirmar
+                      </Button>
+                    )}
                     <Button
                       size="sm"
                       variant="outline"
