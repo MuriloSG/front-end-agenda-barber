@@ -251,3 +251,49 @@ export async function deleteWorkDay(work_day_id) {
 
   return { message: "Serviço deletado com sucesso!" };
 }
+
+export async function reactivateAllSlotsWorkDay(work_day_id) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/schedule/generate-slots/${work_day_id}/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${TOKEN}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.detail || "Erro ao reativar horários");
+  }
+  return result;
+}
+
+export async function deactivateAllSlotsWorkDay(work_day_id) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(`${API_URL}/schedule/delete-slots/${work_day_id}/`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${TOKEN}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.detail || "Erro ao desativar horários");
+  }
+  return result;
+}

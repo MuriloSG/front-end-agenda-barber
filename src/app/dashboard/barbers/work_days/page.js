@@ -3,11 +3,16 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { CalendarPlus, Pencil, Trash2, Clock, Plus } from "lucide-react";
+import { CalendarPlus, Pencil, Trash2, Clock, Plus, Eye, Trash } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/skeletonWorkDay/skeleton";
 import { ErrorMesage } from "@/components/errorMessage/errorMessage";
-import { getBarberWorkDays, deleteWorkDay} from "@/lib/api/barber";
+import {
+  getBarberWorkDays,
+  deleteWorkDay,
+  reactivateAllSlotsWorkDay,
+  deactivateAllSlotsWorkDay,
+} from "@/lib/api/barber";
 import { toast } from "sonner";
 import Swal from "sweetalert2"; 
 
@@ -15,21 +20,21 @@ export default function BarberSchedule() {
   const [workDays, setWorkDays] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchWorkDays = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getBarberWorkDays();
-        setWorkDays(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log("Erro ao carregar os dados: ", error);
-        setIsLoading(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchWorkDays = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getBarberWorkDays();
+      setWorkDays(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Erro ao carregar os dados: ", error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchWorkDays();
   }, []);
 
@@ -52,6 +57,56 @@ export default function BarberSchedule() {
           return true;
         } catch (error) {
           toast.error("Erro ao deletar dia de trabalho!");
+          return false;
+        }
+      },
+    });
+  };
+
+  const handleReactivate = async (work_day_id) => {
+    const result = await Swal.fire({
+      title: "Reativar horários?",
+      text: "Deseja regenerar todos os horários disponíveis para este dia?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sim, regenerar!",
+      cancelButtonText: "Cancelar",
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      preConfirm: async () => {
+        try {
+          const response = await reactivateAllSlotsWorkDay(work_day_id);
+          fetchWorkDays();
+          toast.success("Horários reativados com sucesso!");
+          return true;
+        } catch (error) {
+          toast.error("Erro ao reativados horários!");
+          return false;
+        }
+      },
+    });
+  };
+
+  const handleDesactivate = async (work_day_id) => {
+    const result = await Swal.fire({
+      title: "Excluir horários?",
+      text: "Deseja excluir todos os horários deste dia?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sim, excluir!",
+      cancelButtonText: "Cancelar",
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      preConfirm: async () => {
+        try {
+          const response = await deactivateAllSlotsWorkDay(work_day_id);
+          fetchWorkDays();
+          toast.success("Horários excluidos com sucesso!");
+          return true;
+        } catch (error) {
+          toast.error("Erro ao excluir horários!");
           return false;
         }
       },
@@ -135,13 +190,33 @@ export default function BarberSchedule() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-2">
                 {day.free_time_count <= 0 ? (
-                  <Button className="w-full bg-green-600 hover:bg-green-700">
+                  <Button
+                    className="w-full bg-green-600 hover:bg-green-700"
+                    onClick={() => handleReactivate(day.id, index)}
+                  >
                     <CalendarPlus className="mr-2 h-4 w-4" />
                     Reativar horários
                   </Button>
                 ) : null}
+                <div className="flex flex-col sm:flex-row justify-center gap-2">
+                  <Button
+                    className="w-full sm:w-[10rem] bg-red-600 hover:bg-red-700 flex items-center gap-2"
+                    onClick={() => handleDesactivate(day.id)}
+                  >
+                    <Trash className="h-4 w-4" />
+                    Excluir horários
+                  </Button>
+
+                  <Button
+                    className="w-full sm:w-[10rem] bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+                    onClick={() => handleView(day.id)}
+                  >
+                    <Eye className="h-4 w-4" />
+                    Ver horários
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))

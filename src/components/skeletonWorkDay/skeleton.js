@@ -33,8 +33,12 @@ export function Skeleton() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-2">
               <div className="h-10 w-full bg-muted rounded-md animate-pulse" />
+              <div className="flex flex-col sm:flex-row justify-center gap-2">
+                <div className="h-10 w-full bg-muted rounded-md animate-pulse"></div>
+                <div className="h-10 w-full bg-muted rounded-md animate-pulse"></div>
+              </div>
             </CardContent>
           </Card>
         ))}
