@@ -43,7 +43,7 @@ export function Sidebar({ userType, className }) {
           {
             name: "Agendar",
             icon: Calendar,
-            href: "/dashboard/customers/appointment/novo",
+            href: "/dashboard/customers/",
           },
           {
             name: "Meus Agendamentos",
@@ -127,6 +127,7 @@ export function Sidebar({ userType, className }) {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
+                    setOpen(false);
                     handleLogout();
                   }}
                   className={cn(
@@ -174,6 +175,7 @@ export function Sidebar({ userType, className }) {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
+                setOpen(false);
                 handleLogout();
               }}
               className={cn(
