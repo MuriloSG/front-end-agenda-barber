@@ -99,9 +99,9 @@ export default function BarbersDashboard() {
             </div>
             <div className="flex items-center gap-2 mt-2">
               <div className="flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3 text-green-500" />
+                <CheckCircle2 className="h-3 w-3 text-blue-600" />
                 <span className="text-xs">
-                  {statistic.last_30_days_stats.confirmed} confirmados
+                  {statistic.last_30_days_stats.completed} Atendidos
                 </span>
               </div>
               <div className="flex items-center gap-1">

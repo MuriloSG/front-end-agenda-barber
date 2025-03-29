@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { CheckCircle, XCircle, ChevronDown } from "lucide-react";
+import { XCircle, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -25,14 +24,10 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn, formatCurrency, formatTime } from "@/lib/utils";
-import {
-  getBarberAppointments,
-  confirmAppointment,
-  cancelAppointment,
-  completeAppointment,
-} from "@/lib/api/barber";
+import { getCustomerAppointments, cancelAppointment } from "@/lib/api/customer";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import { Input } from "@/components/ui/input";
 
 const statusOptions = [
   { value: "all", label: "Todos os status" },
@@ -58,13 +53,13 @@ export default function AppointmentsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState({
     status: "all",
-    clientName: "",
     day: "all",
+    barberName: "",
   });
   const [filterInputs, setFilterInputs] = useState({
     status: "all",
-    clientName: "",
     day: "all",
+    barberName: "",
   });
   const [error, setError] = useState(null);
   const [expandedRows, setExpandedRows] = useState(new Set());
@@ -73,10 +68,10 @@ export default function AppointmentsPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await getBarberAppointments(
+      const data = await getCustomerAppointments(
         filters.status === "all" ? null : filters.status,
-        filters.clientName || "",
-        filters.day === "all" ? null : filters.day
+          filters.barberName || "",
+        filters.day === "all" ? null : filters.day,
       );
       setAppointments(data);
     } catch (error) {
@@ -89,31 +84,6 @@ export default function AppointmentsPage() {
   useEffect(() => {
     fetchAppointments();
   }, [fetchAppointments]);
-
-  const handleConfirm = async (id) => {
-    const result = await Swal.fire({
-      title: "Confirmar agendamento?",
-      text: "Deseja confirmar este agendamento?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Sim, confirmar!",
-      cancelButtonText: "Cancelar",
-      showLoaderOnConfirm: true,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      preConfirm: async () => {
-        try {
-          const response = await confirmAppointment(id);
-          await fetchAppointments();
-          toast.success("Agendamento confirmado com sucesso!");
-          return true;
-        } catch (error) {
-          toast.error("Erro ao confirmar agendamento!");
-          return false;
-        }
-      },
-    });
-  };
 
   const handleCancel = async (id) => {
     const result = await Swal.fire({
@@ -140,31 +110,6 @@ export default function AppointmentsPage() {
     });
   };
 
-  const handleComplete = async (id) => {
-    const result = await Swal.fire({
-      title: "Marcar como atendido?",
-      text: "Deseja marcar este agendamento como concluído?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Sim, concluir!",
-      cancelButtonText: "Cancelar",
-      showLoaderOnConfirm: true,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      preConfirm: async () => {
-        try {
-          const response = await completeAppointment(id);
-          await fetchAppointments();
-          toast.success("Agendamento marcado como concluído!");
-          return true;
-        } catch (error) {
-          toast.error("Erro ao marcar agendamento como concluído!");
-          return false;
-        }
-      },
-    });
-  };
-
   const toggleRow = (id) => {
     setExpandedRows((prev) => {
       const next = new Set(prev);
@@ -182,8 +127,8 @@ export default function AppointmentsPage() {
   };
 
   const clearFilters = () => {
-    setFilterInputs({ status: "all", clientName: "", day: "all" });
-    setFilters({ status: "all", clientName: "", day: "all" });
+    setFilterInputs({ status: "all", day: "all", barberName: "" });
+    setFilters({ status: "all", day: "all", barberName: "" });
   };
 
   const getStatusBadge = (status) => (
@@ -202,7 +147,7 @@ export default function AppointmentsPage() {
 
   return (
     <div className="space-y-6 p-4 md:p-6 mt-10">
-      <h1 className="text-2xl md:text-3xl font-bold">Agendamentos</h1>
+      <h1 className="text-2xl md:text-3xl font-bold">Meus Agendamentos</h1>
 
       <div className="flex flex-col gap-3">
         <Select
@@ -241,10 +186,10 @@ export default function AppointmentsPage() {
         </Select>
 
         <Input
-          placeholder="Nome do cliente"
-          value={filterInputs.clientName}
+          placeholder="Nome do barbeiro"
+          value={filterInputs.barberName}
           onChange={(e) =>
-            setFilterInputs({ ...filterInputs, clientName: e.target.value })
+            setFilterInputs({ ...filterInputs, barberName: e.target.value })
           }
           className="w-full"
         />
@@ -254,8 +199,8 @@ export default function AppointmentsPage() {
             Filtrar
           </Button>
           {(filters.status !== "all" ||
-            filters.clientName ||
-            filters.day !== "all") && (
+            filters.day !== "all" ||
+            filters.barberName) && (
             <Button variant="outline" onClick={clearFilters}>
               Limpar
             </Button>
@@ -273,7 +218,7 @@ export default function AppointmentsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Cliente</TableHead>
+              <TableHead>Barbeiro</TableHead>
               <TableHead>Serviço</TableHead>
               <TableHead>Dia</TableHead>
               <TableHead>Horário</TableHead>
@@ -299,9 +244,9 @@ export default function AppointmentsPage() {
               appointments.map((appointment) => (
                 <TableRow key={appointment.id}>
                   <TableCell>
-                    {appointment.client?.username ||
-                      appointment.client?.email ||
-                      "Cliente não identificado"}
+                    {appointment.barber?.username ||
+                      appointment.barber?.email ||
+                      "Barbeiro não identificado"}
                   </TableCell>
                   <TableCell>{appointment.service.name}</TableCell>
                   <TableCell>
@@ -313,41 +258,18 @@ export default function AppointmentsPage() {
                   <TableCell>{formatCurrency(appointment.price)}</TableCell>
                   <TableCell>{getStatusBadge(appointment.status)}</TableCell>
                   <TableCell className="text-right">
-                    {appointment.status !== "completed" &&
-                      appointment.status !== "canceled" && (
-                        <div className="flex justify-end gap-2">
-                          {appointment.status === "confirmed" && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700"
-                              onClick={() => handleComplete(appointment.id)}
-                            >
-                              <CheckCircle className="h-4 w-4" />
-                            </Button>
-                          )}
-                          {appointment.status !== "canceled" && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-8 w-8 p-0 text-green-600 hover:text-green-700"
-                              onClick={() => handleConfirm(appointment.id)}
-                              disabled={appointment.status === "confirmed"}
-                            >
-                              <CheckCircle className="h-4 w-4" />
-                            </Button>
-                          )}
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                            onClick={() => handleCancel(appointment.id)}
-                            disabled={appointment.status === "canceled"}
-                          >
-                            <XCircle className="h-4 w-4" />
-                          </Button>
-                        </div>
+                    <div className="flex justify-end gap-2">
+                      {appointment.status === "confirmed" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                          onClick={() => handleCancel(appointment.id)}
+                        >
+                          <XCircle className="h-4 w-4" />
+                        </Button>
                       )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -373,9 +295,9 @@ export default function AppointmentsPage() {
                 <div className="flex items-center justify-between p-4">
                   <div className="flex-1">
                     <div className="font-medium">
-                      {appointment.client?.username ||
-                        appointment.client?.email ||
-                        "Cliente não identificado"}
+                      {appointment.barber?.username ||
+                        appointment.barber?.email ||
+                        "Barbeiro não identificado"}
                     </div>
                     <div className="text-sm text-muted-foreground">
                       {formatTime(appointment.time_slot?.time)}h
@@ -410,43 +332,19 @@ export default function AppointmentsPage() {
                     </span>
                     <span>{formatCurrency(appointment.price)}</span>
                   </div>
-                  {appointment.status !== "completed" && appointment.status !== "canceled" && (
-                    <div className="flex gap-2 justify-end mt-4">
-                      {appointment.status === "confirmed" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-blue-600"
-                          onClick={() => handleComplete(appointment.id)}
-                        >
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          Concluir
-                        </Button>
-                      )}
-                      {appointment.status !== "canceled" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-green-600"
-                          onClick={() => handleConfirm(appointment.id)}
-                          disabled={appointment.status === "confirmed"}
-                        >
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          Confirmar
-                        </Button>
-                      )}
+                  <div className="flex gap-2 justify-end mt-4">
+                    {appointment.status === "confirmed" && (
                       <Button
                         size="sm"
                         variant="outline"
                         className="text-red-600"
                         onClick={() => handleCancel(appointment.id)}
-                        disabled={appointment.status === "canceled"}
                       >
                         <XCircle className="h-4 w-4 mr-2" />
                         Cancelar
                       </Button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </CollapsibleContent>
             </Collapsible>

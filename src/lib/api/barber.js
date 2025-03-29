@@ -485,3 +485,33 @@ export async function cancelAppointment(appointmentId) {
 
   return result;
 }
+
+export async function completeAppointment(appointmentId) {
+  const TOKEN = Cookies.get("token");
+  if (!TOKEN) {
+    throw new Error("Token não encontrado nos cookies");
+  }
+
+  const response = await fetch(
+    `${API_URL}/appointments/complete/${appointmentId}/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${TOKEN}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    const errorMessage =
+      result.detail ||
+      result.non_field_errors?.join(", ") ||
+      "Erro ao marcar o agendamento como atendido";
+    throw new Error(errorMessage);
+  }
+
+  return result;
+}
