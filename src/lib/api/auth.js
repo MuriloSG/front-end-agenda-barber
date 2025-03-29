@@ -56,3 +56,20 @@ export async function logoutUser() {
   Cookies.remove("user");
   return result;
 }
+
+export async function submitRating(data) {
+  const TOKEN = Cookies.get("token");
+  const response = await fetch(`${API_URL}/auth/ratings/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${TOKEN}`,
+    },
+    body: JSON.stringify(data),
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.error);
+  }
+  return result;
+}
