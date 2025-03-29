@@ -491,9 +491,9 @@ export default function CustomersPage() {
                   <h3 className="font-semibold">{barber.username}</h3>
                   <p className="text-sm text-gray-500">{barber.city}</p>
                   <div className="mt-2 flex items-center gap-1">
-                    {renderStars(barber.rating)}
+                    {renderStars(barber.average_rating)}
                     <span className="ml-2 text-sm text-gray-500">
-                      ({barber.totalRatings})
+                      ({barber.total_ratings})
                     </span>
                   </div>
                 </div>
@@ -506,7 +506,10 @@ export default function CustomersPage() {
                 >
                   Agendar
                 </Button>
-                <Button variant="secondary" onClick={() => handleRating(barber)}>
+                <Button
+                  variant="secondary"
+                  onClick={() => handleRating(barber)}
+                >
                   Avaliar
                 </Button>
               </CardFooter>

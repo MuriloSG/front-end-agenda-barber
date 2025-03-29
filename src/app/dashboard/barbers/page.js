@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   XCircle,
   Clock,
+  Star,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { cn } from "@/lib/utils";
@@ -44,6 +45,19 @@ export default function BarbersDashboard() {
       />
     );
   }
+  const renderStars = (rating) => {
+    return [...Array(5)].map((_, index) => (
+      <Star
+        key={index}
+        className={cn(
+          "h-4 w-4",
+          index < Math.floor(rating)
+            ? "text-yellow-400 fill-yellow-400"
+            : "text-gray-300"
+        )}
+      />
+    ));
+  };
 
   return (
     <div className="space-y-6 mt-10">
@@ -55,6 +69,23 @@ export default function BarbersDashboard() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Avaliações</CardTitle>
+            <Star className="h-4 w-4 text-yellow-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {statistic.rating_metrics.average_rating.toFixed(1)}
+            </div>
+            <div className="flex items-center gap-1 mt-2">
+              {renderStars(statistic.rating_metrics.average_rating)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Total de avaliações: {statistic.rating_metrics.total_ratings}
+            </p>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -106,7 +137,7 @@ export default function BarbersDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Status dos Agendamentos
+              Status dos Agendamentos nos últimos 30 dias
             </CardTitle>
             <Clock className="h-4 w-4 text-primary" />
           </CardHeader>
@@ -127,6 +158,12 @@ export default function BarbersDashboard() {
               <span>Cancelados</span>
               <span className="font-medium">
                 {statistic.last_30_days_stats.status_distribution.canceled}
+              </span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span>Concluídos</span>
+              <span className="font-medium">
+                {statistic.last_30_days_stats.status_distribution.completed}
               </span>
             </div>
           </CardContent>
