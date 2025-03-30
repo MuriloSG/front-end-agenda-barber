@@ -180,9 +180,10 @@ export default function CustomersPage() {
         service: selectedService.name,
         date: selectedDay.day_of_week_display,
         time: formatTime(selectedSlot.time),
-        price: selectedService.price,
+        price: appointment.price,
         whatsapp: selectedBarber.whatsapp,
-        pix_key: selectedBarber.pix_key
+        pix_key: selectedBarber.pix_key,
+        is_free: appointment.is_free,
       });
 
       setConfirmationDialogOpen(true);
@@ -587,6 +588,13 @@ export default function CustomersPage() {
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-4">
+              {appointmentDetails?.is_free && appointmentDetails?.price === 0 ? (
+                <div className="rounded-lg bg-green-50 p-4 text-center">
+                  <p className="text-green-700 font-medium">
+                    🎉 Parabéns! Este agendamento é uma recompensa pelos seus agendamentos anteriores!
+                  </p>
+                </div>
+              ) : null}
               <div className="rounded-lg border p-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
@@ -607,7 +615,11 @@ export default function CustomersPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-500">Valor:</span>
-                    <span className="font-medium">{formatCurrency(appointmentDetails?.price)}</span>
+                    <span className="font-medium">
+                      {appointmentDetails?.is_free && appointmentDetails?.price === 0 
+                        ? "Gratuito (Recompensa)" 
+                        : formatCurrency(appointmentDetails?.price)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-500">WhatsApp:</span>
@@ -622,7 +634,7 @@ export default function CustomersPage() {
               <div className="flex flex-col gap-2">
                 <Button
                   onClick={() => {
-                    const message = `Olá ${appointmentDetails?.barber}! Gostaria de confirmar meu agendamento:\n\nServiço: ${appointmentDetails?.service}\nData: ${appointmentDetails?.date}\nHorário: ${appointmentDetails?.time}\nValor: ${formatCurrency(appointmentDetails?.price)}\n\nChave PIX para pagamento: ${appointmentDetails?.pix_key}`;
+                    const message = `Olá ${appointmentDetails?.barber}! Gostaria de confirmar meu agendamento:\n\nServiço: ${appointmentDetails?.service}\nData: ${appointmentDetails?.date}\nHorário: ${appointmentDetails?.time}\nValor: ${appointmentDetails?.is_free && appointmentDetails?.price === 0 ? "Gratuito (Recompensa)" : formatCurrency(appointmentDetails?.price)}\n\n${appointmentDetails?.is_free && appointmentDetails?.price === 0 ? "" : `Chave PIX para pagamento: ${appointmentDetails?.pix_key}`}`;
                     const encodedMessage = encodeURIComponent(message);
                     window.open(`https://wa.me/${appointmentDetails?.whatsapp}?text=${encodedMessage}`, '_blank');
                   }}
