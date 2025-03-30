@@ -134,6 +134,12 @@ export default function LoginPage() {
               Registre-se
             </Link>
           </div>
+          <div className="text-sm text-muted-foreground text-center">
+            Esqueceu sua senha?{" "}
+            <Link href="/forgot-password" className="text-primary hover:underline">
+              Recuperar senha
+            </Link>
+          </div>
         </CardFooter>
       </Card>
     </div>

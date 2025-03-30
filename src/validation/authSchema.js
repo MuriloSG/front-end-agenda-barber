@@ -50,3 +50,20 @@ export const UpdateCustomerSchema = z.object({
   city: z.string().min(1, "Selecione uma cidade"),
   whatsapp: z.string().regex(/^\d{11}$/, "Número de WhatsApp inválido"),
 });
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Email inválido"),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    new_password: z
+      .string()
+      .min(6, "A senha deve ter pelo menos 6 caracteres")
+      .max(128, "A senha não pode ter mais que 128 caracteres"),
+    confirm_password: z.string(),
+  })
+  .refine((data) => data.new_password === data.confirm_password, {
+    message: "As senhas não coincidem",
+    path: ["confirm_password"],
+  });

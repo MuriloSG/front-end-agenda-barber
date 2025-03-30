@@ -73,3 +73,37 @@ export async function submitRating(data) {
   }
   return result;
 }
+
+export async function requestPasswordReset(email) {
+  const response = await fetch(`${API_URL}/auth/password-reset/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.detail || "Erro ao enviar email de recuperação");
+  }
+  return result;
+}
+
+export async function confirmPasswordReset(uid, token, new_password) {
+  const response = await fetch(`${API_URL}/auth/password-reset/confirm/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      uid,
+      token,
+      new_password,
+    }),
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.detail || "Erro ao redefinir senha");
+  }
+  return result;
+}
