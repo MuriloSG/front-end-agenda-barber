@@ -1,7 +1,11 @@
 import Cookies from "js-cookie";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-
+/**
+ * Obtém o perfil do cliente logado
+ * @returns {Promise<Object>} - Retorna os dados do perfil do cliente
+ * @throws {Error} - Lança erro se o token for inválido ou não existir
+ */
 export async function getCustomerProfile() {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -29,6 +33,12 @@ export async function getCustomerProfile() {
   return result;
 }
 
+/**
+ * Atualiza o perfil do cliente
+ * @param {FormData} data - Dados do perfil a serem atualizados
+ * @returns {Promise<Object>} - Retorna os dados atualizados do perfil
+ * @throws {Error} - Lança erro se o token for inválido ou os dados forem incorretos
+ */
 export async function updateCustomerProfile(data) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -53,6 +63,12 @@ export async function updateCustomerProfile(data) {
   return result;
 }
 
+/**
+ * Obtém a lista de barbeiros disponíveis
+ * @param {string} [name] - Nome do barbeiro para filtrar (opcional)
+ * @returns {Promise<Array>} - Retorna lista de barbeiros
+ * @throws {Error} - Lança erro se não for possível buscar os barbeiros
+ */
 export async function getBarbers(name) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -84,6 +100,12 @@ export async function getBarbers(name) {
   return result;
 }
 
+/**
+ * Obtém os dias de trabalho de um barbeiro específico
+ * @param {number} barberId - ID do barbeiro
+ * @returns {Promise<Array>} - Retorna lista de dias de trabalho
+ * @throws {Error} - Lança erro se não for possível obter os dias de trabalho
+ */
 export async function getBarberWorkDays(barberId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -112,6 +134,12 @@ export async function getBarberWorkDays(barberId) {
   return result;
 }
 
+/**
+ * Obtém os horários disponíveis de um dia de trabalho
+ * @param {number} workdayId - ID do dia de trabalho
+ * @returns {Promise<Array>} - Retorna lista de horários disponíveis
+ * @throws {Error} - Lança erro se não for possível obter os horários
+ */
 export async function getSlotsByWorkDay(workdayId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -143,6 +171,12 @@ export async function getSlotsByWorkDay(workdayId) {
   })).filter(slot => slot.is_available);
 }
 
+/**
+ * Obtém os serviços disponíveis de um barbeiro
+ * @param {number} barberId - ID do barbeiro
+ * @returns {Promise<Array>} - Retorna lista de serviços
+ * @throws {Error} - Lança erro se não for possível obter os serviços
+ */
 export async function getBarberServices(barberId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -172,6 +206,15 @@ export async function getBarberServices(barberId) {
   return result;
 }
 
+/**
+ * Cria um novo agendamento
+ * @param {number} serviceId - ID do serviço
+ * @param {number} timeSlotId - ID do horário
+ * @param {number} barberId - ID do barbeiro
+ * @param {number} clientId - ID do cliente
+ * @returns {Promise<Object>} - Retorna os dados do agendamento criado
+ * @throws {Error} - Lança erro se não for possível criar o agendamento
+ */
 export async function createAppointment(serviceId, timeSlotId, barberId, clientId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -207,6 +250,12 @@ export async function createAppointment(serviceId, timeSlotId, barberId, clientI
   return result;
 }
 
+/**
+ * Cancela um agendamento
+ * @param {number} appointmentId - ID do agendamento
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se não for possível cancelar o agendamento
+ */
 export async function cancelAppointment(appointmentId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -237,6 +286,14 @@ export async function cancelAppointment(appointmentId) {
   return result;
 }
 
+/**
+ * Obtém os agendamentos do cliente com filtros opcionais
+ * @param {string} [status] - Status do agendamento (opcional)
+ * @param {string} [barberName] - Nome do barbeiro (opcional)
+ * @param {string} [day] - Data do agendamento (opcional)
+ * @returns {Promise<Array>} - Retorna lista de agendamentos
+ * @throws {Error} - Lança erro se não for possível buscar os agendamentos
+ */
 export async function getCustomerAppointments(status, barberName, day) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {

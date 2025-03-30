@@ -1,6 +1,11 @@
 import Cookies from "js-cookie";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+/**
+ * Obtém o perfil do barbeiro logado
+ * @returns {Promise<Object>} - Retorna os dados do perfil do barbeiro
+ * @throws {Error} - Lança erro se o token for inválido ou não existir
+ */
 export async function getBarberProfile() {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -28,6 +33,12 @@ export async function getBarberProfile() {
   return result;
 }
 
+/**
+ * Atualiza o perfil do barbeiro
+ * @param {FormData} data - Dados do perfil a serem atualizados
+ * @returns {Promise<Object>} - Retorna os dados atualizados do perfil
+ * @throws {Error} - Lança erro se o token for inválido ou os dados forem incorretos
+ */
 export async function updateBarberProfile(data) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -52,6 +63,11 @@ export async function updateBarberProfile(data) {
   return result;
 }
 
+/**
+ * Obtém estatísticas do barbeiro
+ * @returns {Promise<Object>} - Retorna estatísticas 
+ * @throws {Error} - Lança erro se o token for inválido
+ */
 export async function getBarberStatistics() {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -72,6 +88,11 @@ export async function getBarberStatistics() {
   return result;
 }
 
+/**
+ * Obtém todos os serviços do barbeiro
+ * @returns {Promise<Array>} - Retorna lista de serviços
+ * @throws {Error} - Lança erro se o token for inválido
+ */
 export async function getBarberServices() {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -92,6 +113,12 @@ export async function getBarberServices() {
   return result;
 }
 
+/**
+ * Obtém um serviço específico pelo ID
+ * @param {number} serviceId - ID do serviço
+ * @returns {Promise<Object>} - Retorna os dados do serviço
+ * @throws {Error} - Lança erro se o serviço não for encontrado
+ */
 export async function getServiceById(serviceId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -115,6 +142,12 @@ export async function getServiceById(serviceId) {
   return result;
 }
 
+/**
+ * Cria um novo serviço
+ * @param {FormData} data - Dados do serviço a ser criado
+ * @returns {Promise<Object>} - Retorna os dados do serviço criado
+ * @throws {Error} - Lança erro se os dados forem inválidos
+ */
 export async function createService(data) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -139,8 +172,14 @@ export async function createService(data) {
   return result;
 }
 
+/**
+ * Atualiza um serviço existente
+ * @param {number} serviceId - ID do serviço
+ * @param {FormData} data - Dados atualizados do serviço
+ * @returns {Promise<Object>} - Retorna os dados do serviço atualizado
+ * @throws {Error} - Lança erro se os dados forem inválidos
+ */
 export async function updateService(serviceId, data) {
-  console.log(data);
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
     throw new Error("Token não encontrado nos cookies");
@@ -164,6 +203,12 @@ export async function updateService(serviceId, data) {
   return result;
 }
 
+/**
+ * Deleta um serviço
+ * @param {number} serviceId - ID do serviço
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se o serviço não puder ser deletado
+ */
 export async function deleteService(serviceId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -186,6 +231,11 @@ export async function deleteService(serviceId) {
   return { message: "Serviço deletado com sucesso!" };
 }
 
+/**
+ * Obtém todos os dias de trabalho do barbeiro
+ * @returns {Promise<Array>} - Retorna lista de dias de trabalho
+ * @throws {Error} - Lança erro se o token for inválido
+ */
 export async function getBarberWorkDays() {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -206,6 +256,12 @@ export async function getBarberWorkDays() {
   return result;
 }
 
+/**
+ * Obtém um dia de trabalho específico
+ * @param {number} work_day_id - ID do dia de trabalho
+ * @returns {Promise<Object>} - Retorna os dados do dia de trabalho
+ * @throws {Error} - Lança erro se o dia não for encontrado
+ */
 export async function getWorkDay(work_day_id) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -229,6 +285,12 @@ export async function getWorkDay(work_day_id) {
   return result;
 }
 
+/**
+ * Cria um novo dia de trabalho
+ * @param {Object} data - Dados do dia de trabalho
+ * @returns {Promise<Object>} - Retorna os dados do dia criado
+ * @throws {Error} - Lança erro se os dados forem inválidos
+ */
 export async function createWorkDay(data) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -258,6 +320,13 @@ export async function createWorkDay(data) {
   return result;
 }
 
+/**
+ * Atualiza um dia de trabalho existente
+ * @param {number} work_day_id - ID do dia de trabalho
+ * @param {Object} data - Dados atualizados do dia
+ * @returns {Promise<Object>} - Retorna os dados do dia atualizado
+ * @throws {Error} - Lança erro se os dados forem inválidos
+ */
 export async function updateWorkDay(work_day_id, data) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) throw new Error("Token não encontrado");
@@ -280,6 +349,12 @@ export async function updateWorkDay(work_day_id, data) {
   return result;
 }
 
+/**
+ * Deleta um dia de trabalho
+ * @param {number} work_day_id - ID do dia de trabalho
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se o dia não puder ser deletado
+ */
 export async function deleteWorkDay(work_day_id) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -302,6 +377,12 @@ export async function deleteWorkDay(work_day_id) {
   return { message: "Serviço deletado com sucesso!" };
 }
 
+/**
+ * Obtém os horários disponíveis de um dia de trabalho
+ * @param {number} work_day_id - ID do dia de trabalho
+ * @returns {Promise<Array>} - Retorna lista de horários disponíveis
+ * @throws {Error} - Lança erro se o dia não for encontrado
+ */
 export async function getSlotsWorkDay(work_day_id) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -324,6 +405,12 @@ export async function getSlotsWorkDay(work_day_id) {
   return result;
 }
 
+/**
+ * Reativa todos os horários de um dia de trabalho
+ * @param {number} work_day_id - ID do dia de trabalho
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se não for possível reativar os horários
+ */
 export async function reactivateAllSlotsWorkDay(work_day_id) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -348,6 +435,12 @@ export async function reactivateAllSlotsWorkDay(work_day_id) {
   return result;
 }
 
+/**
+ * Desativa todos os horários de um dia de trabalho
+ * @param {number} work_day_id - ID do dia de trabalho
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se não for possível desativar os horários
+ */
 export async function deactivateAllSlotsWorkDay(work_day_id) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -372,6 +465,12 @@ export async function deactivateAllSlotsWorkDay(work_day_id) {
   return result;
 }
 
+/**
+ * Deleta um horário específico de um dia de trabalho
+ * @param {number} work_day_id - ID do dia de trabalho
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se não for possível deletar o horário
+ */
 export async function deleteSlotsWorkDay(work_day_id) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -394,6 +493,14 @@ export async function deleteSlotsWorkDay(work_day_id) {
   throw new Error(result.non_field_errors);
 }
 
+/**
+ * Obtém os agendamentos do barbeiro com filtros opcionais
+ * @param {string} [status] - Status do agendamento (opcional)
+ * @param {string} [clientName] - Nome do cliente (opcional)
+ * @param {string} [day] - Data do agendamento (opcional)
+ * @returns {Promise<Array>} - Retorna lista de agendamentos
+ * @throws {Error} - Lança erro se não for possível buscar os agendamentos
+ */
 export async function getBarberAppointments(status, clientName, day) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -426,6 +533,12 @@ export async function getBarberAppointments(status, clientName, day) {
   return result;
 }
 
+/**
+ * Confirma um agendamento
+ * @param {number} appointmentId - ID do agendamento
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se não for possível confirmar o agendamento
+ */
 export async function confirmAppointment(appointmentId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -456,6 +569,12 @@ export async function confirmAppointment(appointmentId) {
   return result;
 }
 
+/**
+ * Cancela um agendamento
+ * @param {number} appointmentId - ID do agendamento
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se não for possível cancelar o agendamento
+ */
 export async function cancelAppointment(appointmentId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
@@ -486,6 +605,12 @@ export async function cancelAppointment(appointmentId) {
   return result;
 }
 
+/**
+ * Marca um agendamento como concluído
+ * @param {number} appointmentId - ID do agendamento
+ * @returns {Promise<Object>} - Retorna mensagem de sucesso
+ * @throws {Error} - Lança erro se não for possível marcar o agendamento como concluído
+ */
 export async function completeAppointment(appointmentId) {
   const TOKEN = Cookies.get("token");
   if (!TOKEN) {
