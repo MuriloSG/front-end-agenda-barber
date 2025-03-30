@@ -35,7 +35,6 @@ O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e cli
 - **Redefinição de Senha**
   ![Redefinição de Senha - Mobile](/public/auth/redefinir_senha_mobile.png)
 
-
 ### Área do Cliente
 
 #### Desktop
@@ -44,7 +43,7 @@ O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e cli
 - **Meus Agendamentos**
   ![Meus Agendamentos - Desktop](/public/cusmoters/meus_agendamentos_desk.png)
 - **Perfil**
-  ![Perfil - Desktop](/public//cusmoters/perfil_desk.png)
+  ![Perfil - Desktop](/public/cusmoters/perfil_desk.png)
 
 #### Mobile
 - **Página Inicial**
@@ -71,7 +70,7 @@ O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e cli
 #### Mobile
 - **Página Inicial**
   ![Página Inicial - Mobile](/public/barber/inicio_mobile.png)
--  **Dias de Trabalho**
+- **Dias de Trabalho**
   ![Dias de trabalho - Mobile](/public/barber/dias_trabalho_mobile.png)
 - **Agendamentos**
   ![Agendamentos - Mobile](/public/barber/agendamentos_mobile.png)
