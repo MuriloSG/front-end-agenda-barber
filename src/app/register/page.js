@@ -114,15 +114,15 @@ export default function RegisterPage() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Telefone</Label>
+              <Label htmlFor="phone">WhatsApp</Label>
               <Input
                 id="phone"
                 type="tel"
                 placeholder="11999999999"
-                {...register("phone")}
+                {...register("whatsapp")}
               />
-              {errors.phone && (
-                <p className="text-red-500 text-sm">{errors.phone.message}</p>
+              {errors.whatsapp && (
+                <p className="text-red-500 text-sm">{errors.whatsapp.message}</p>
               )}
             </div>
             <div className="space-y-2">
@@ -139,15 +139,15 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
-            <div className="flex justify-between gap-1">
-              <div className="space-y-2">
+            <div className="flex flex-col sm:flex-row justify-between gap-4">
+              <div className="space-y-2 flex-1">
                 <Label htmlFor="profile_type">Tipo de perfil</Label>
                 <Controller
                   name="profile_type"
                   control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="sm:max-w-[130px]">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecionar perfil" />
                       </SelectTrigger>
                       <SelectContent>
@@ -164,14 +164,14 @@ export default function RegisterPage() {
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 flex-1">
                 <Label htmlFor="city">Cidade</Label>
                 <Controller
                   name="city"
                   control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className=" sm:max-w-[130px]">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecionar cidade" />
                       </SelectTrigger>
                       <SelectContent>

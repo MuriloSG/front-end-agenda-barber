@@ -57,6 +57,8 @@ export default function CustomersPage() {
   const [isSubmittingRating, setIsSubmittingRating] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [schedulingDialogOpen, setSchedulingDialogOpen] = useState(false);
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [appointmentDetails, setAppointmentDetails] = useState(null);
 
   useEffect(() => {
     const fetchBarbers = async () => {
@@ -166,17 +168,24 @@ export default function CustomersPage() {
     setIsScheduling(true);
     try {
       const user = JSON.parse(Cookies.get("user"));
-      await createAppointment(
+      const appointment = await createAppointment(
         selectedService.id,
         selectedSlot.id,
         selectedBarber.id,
         user.id
       );
 
-      toast.success("Agendamento realizado com sucesso!", {
-        description: `Seu agendamento com ${selectedBarber.username} foi realizado.`,
+      setAppointmentDetails({
+        barber: selectedBarber.username,
+        service: selectedService.name,
+        date: selectedDay.day_of_week_display,
+        time: formatTime(selectedSlot.time),
+        price: selectedService.price,
+        whatsapp: selectedBarber.whatsapp,
+        pix_key: selectedBarber.pix_key
       });
 
+      setConfirmationDialogOpen(true);
       setSelectedBarber(null);
       setSelectedService(null);
       setSelectedDay(null);
@@ -567,6 +576,69 @@ export default function CustomersPage() {
                 </Button>
               </>
             )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={confirmationDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Agendamento Confirmado!</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="space-y-4">
+              <div className="rounded-lg border p-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Barbeiro:</span>
+                    <span className="font-medium">{appointmentDetails?.barber}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Serviço:</span>
+                    <span className="font-medium">{appointmentDetails?.service}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Data:</span>
+                    <span className="font-medium">{appointmentDetails?.date}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Horário:</span>
+                    <span className="font-medium">{appointmentDetails?.time}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Valor:</span>
+                    <span className="font-medium">{formatCurrency(appointmentDetails?.price)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">WhatsApp:</span>
+                    <span className="font-medium">{appointmentDetails?.whatsapp}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Chave PIX:</span>
+                    <span className="font-medium">{appointmentDetails?.pix_key}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Button
+                  onClick={() => {
+                    const message = `Olá ${appointmentDetails?.barber}! Gostaria de confirmar meu agendamento:\n\nServiço: ${appointmentDetails?.service}\nData: ${appointmentDetails?.date}\nHorário: ${appointmentDetails?.time}\nValor: ${formatCurrency(appointmentDetails?.price)}\n\nChave PIX para pagamento: ${appointmentDetails?.pix_key}`;
+                    const encodedMessage = encodeURIComponent(message);
+                    window.open(`https://wa.me/${appointmentDetails?.whatsapp}?text=${encodedMessage}`, '_blank');
+                  }}
+                  className="w-full bg-green-600 hover:bg-green-700"
+                >
+                  Enviar para WhatsApp
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setConfirmationDialogOpen(false)}
+                  className="w-full"
+                >
+                  Fechar
+                </Button>
+              </div>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

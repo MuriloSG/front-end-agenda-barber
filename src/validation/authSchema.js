@@ -16,7 +16,7 @@ export const registrationSchema = z.object({
     .email("Email inválido")
     .max(254, "O email não pode ter mais de 254 caracteres"),
 
-  phone: z.string().regex(/^\d{11}$/, "Número de WhatsApp inválido"),
+  whatsapp: z.string().regex(/^\d{11}$/, "Número de WhatsApp inválido"),
 
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 
@@ -36,7 +36,7 @@ export const UpdateBarberSchema = z.object({
     .max(150, "O nome de usuário não pode ter mais que 150 caracteres"),
   email: z.string().email("Email inválido"),
   city: z.string().min(1, "Selecione uma cidade"),
-  phone: z.string().regex(/^\d{11}$/, "Número de WhatsApp inválido"),
+  whatsapp: z.string().regex(/^\d{11}$/, "Número de WhatsApp inválido"),
   pix_key: z.string().min(1, "Chave PIX é obrigatória"),
   address: z.string().min(1, "Endereço é obrigatório"),
 });
@@ -48,5 +48,5 @@ export const UpdateCustomerSchema = z.object({
     .max(150, "O nome de usuário não pode ter mais que 150 caracteres"),
   email: z.string().email("Email inválido"),
   city: z.string().min(1, "Selecione uma cidade"),
-  phone: z.string().regex(/^\d{11}$/, "Número de WhatsApp inválido"),
+  whatsapp: z.string().regex(/^\d{11}$/, "Número de WhatsApp inválido"),
 });
