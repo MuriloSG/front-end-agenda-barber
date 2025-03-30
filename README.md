@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# MeuBarbeiro - Documentação Front-end
 
-## Getting Started
+## Autores
+- Murilo Santos
+- José Junior
 
-First, run the development server:
+## Introdução
+O AgendaBarber é uma plataforma web desenvolvida para conectar barbeiros e clientes, oferecendo um sistema de agendamento simples e eficiente. O projeto visa resolver a necessidade de gestão de horários e serviços em barbearias, especialmente em cidades menores, proporcionando uma solução acessível e de fácil adoção. A plataforma permite que barbeiros gerenciem seus serviços e clientes, enquanto os clientes podem agendar horários e acompanhar seu histórico de atendimentos.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Arquitetura
+O projeto utiliza uma arquitetura moderna baseada em componentes, seguindo os princípios do React e Next.js. A estrutura é organizada da seguinte forma:
+
+```
+src/
+├── app/                    # Páginas e rotas da aplicação
+│   ├── dashboard/         # Área restrita (barbeiros e clientes)
+│   └── auth/             # Páginas de autenticação
+├── components/           # Componentes reutilizáveis
+├── lib/                  # Utilitários e configurações
+└── validation/          # Schemas de validação
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologias Utilizadas
+- **Framework**: Next.js 13+ (App Router)
+- **Biblioteca UI**: Shadcn/UI
+- **Gerenciamento de Estado**: React Hook Form
+- **Validação**: Zod
+- **Estilização**: Tailwind CSS
+- **Notificações**: Sonner
+- **Modais**: SweetAlert2
+- **Ícones**: Lucide Icons
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Funcionalidades Implementadas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Área do Cliente
+1. **Perfil do Usuário**
+   - Upload de avatar
+   - Edição de informações pessoais
+   - Seleção de cidade
+   - Contador de agendamentos para recompensas
 
-## Learn More
+2. **Agendamentos**
+   - Agendar Horarios
+   - Avaliar Barbeiros
+   - Listagem de agendamentos
+   - Filtros por barbeiro, status e dia
+   - Cancelamento de agendamentos confirmados
 
-To learn more about Next.js, take a look at the following resources:
+### Área do Barbeiro
+1. **Perfil Profissional**
+   - Upload de avatar
+   - Edição de informações profissionais
+   - Configuração de cidade
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Gestão de Agendamentos**
+   - Listagem completa de agendamentos
+   - Filtros avançados
+   - Confirmação de agendamentos
+   - Cancelamento
+   - Marcação como concluído
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Dashboard**
+   - Métricas de atendimentos
+   - Estatísticas financeiras
+   - Serviços mais populares
+   - Próximos agendamentos
 
-## Deploy on Vercel
+## Validações e Feedback
+- Validação de formulários com Zod
+- Feedback visual de erros
+- Notificações toast para ações
+- Modais de confirmação para ações críticas
+- Indicadores de carregamento
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Segurança
+- Autenticação via tokens
+- Proteção de rotas
+- Validação de dados no front-end
+
+## Próximos Passos
+1. Integração com API de WhatsApp para lembretes
+2. Integração com pagamentos e escolha de metodos de cobrança
+3. 
+
