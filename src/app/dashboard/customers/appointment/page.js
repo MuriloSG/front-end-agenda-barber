@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { XCircle, ChevronDown } from "lucide-react";
+import { XCircle, ChevronDown, Receipt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -28,6 +28,12 @@ import { getCustomerAppointments, cancelAppointment } from "@/lib/api/customer";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const statusOptions = [
   { value: "all", label: "Todos os status" },
@@ -63,6 +69,8 @@ export default function AppointmentsPage() {
   });
   const [error, setError] = useState(null);
   const [expandedRows, setExpandedRows] = useState(new Set());
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   const fetchAppointments = useCallback(async () => {
     setIsLoading(true);
@@ -259,6 +267,17 @@ export default function AppointmentsPage() {
                   <TableCell>{getStatusBadge(appointment.status)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 w-8 p-0"
+                        onClick={() => {
+                          setSelectedAppointment(appointment);
+                          setConfirmationDialogOpen(true);
+                        }}
+                      >
+                        <Receipt className="h-4 w-4" />
+                      </Button>
                       {appointment.status === "confirmed" && (
                         <Button
                           size="sm"
@@ -333,6 +352,17 @@ export default function AppointmentsPage() {
                     <span>{formatCurrency(appointment.price)}</span>
                   </div>
                   <div className="flex gap-2 justify-end mt-4">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setSelectedAppointment(appointment);
+                        setConfirmationDialogOpen(true);
+                      }}
+                    >
+                      <Receipt className="h-4 w-4 mr-2" />
+                      Ver Comprovante
+                    </Button>
                     {appointment.status === "confirmed" && (
                       <Button
                         size="sm"
@@ -351,6 +381,85 @@ export default function AppointmentsPage() {
           ))
         )}
       </div>
+
+      <Dialog 
+        open={confirmationDialogOpen} 
+        onOpenChange={(open) => {
+          if (!open) {
+            setConfirmationDialogOpen(false);
+            setSelectedAppointment(null);
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Comprovante de Agendamento</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="space-y-4">
+              {selectedAppointment?.is_free && selectedAppointment?.price === 0 ? (
+                <div className="rounded-lg bg-green-50 p-4 text-center">
+                  <p className="text-green-700 font-medium">
+                    🎉 Parabéns! Este agendamento é uma recompensa pelos seus agendamentos anteriores!
+                  </p>
+                </div>
+              ) : null}
+              <div className="rounded-lg border p-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Barbeiro:</span>
+                    <span className="font-medium">{selectedAppointment?.barber?.username}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Serviço:</span>
+                    <span className="font-medium">{selectedAppointment?.service?.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Data:</span>
+                    <span className="font-medium">{selectedAppointment?.day_of_week}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Horário:</span>
+                    <span className="font-medium">{formatTime(selectedAppointment?.time_slot?.time)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Valor:</span>
+                    <span className="font-medium">
+                      {selectedAppointment?.is_free && selectedAppointment?.price === 0 
+                        ? "Gratuito (Recompensa)" 
+                        : formatCurrency(selectedAppointment?.price)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">WhatsApp:</span>
+                    <span className="font-medium">{selectedAppointment?.barber?.whatsapp}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Chave PIX:</span>
+                    <span className="font-medium">{selectedAppointment?.barber?.pix_key}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Endereço:</span>
+                    <span className="font-medium">{selectedAppointment?.barber?.address}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setConfirmationDialogOpen(false);
+                    setSelectedAppointment(null);
+                  }}
+                  className="w-full"
+                >
+                  Fechar
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
