@@ -184,6 +184,7 @@ export default function CustomersPage() {
         whatsapp: selectedBarber.whatsapp,
         pix_key: selectedBarber.pix_key,
         is_free: appointment.is_free,
+        address: selectedBarber.address,
       });
 
       setConfirmationDialogOpen(true);
@@ -217,23 +218,8 @@ export default function CustomersPage() {
         rating: selectedRating
       });
 
-      const updatedBarbers = barbers.map((barber) => {
-        if (barber.id === ratingBarber.id) {
-          const newTotalRatings = barber.totalRatings + 1;
-          const newRating =
-            (barber.rating * barber.totalRatings + selectedRating) /
-            newTotalRatings;
-          return {
-            ...barber,
-            rating: newRating,
-            totalRatings: newTotalRatings,
-          };
-        }
-        return barber;
-      });
-      setBarbers(updatedBarbers);
-      setFilteredBarbers(updatedBarbers);
       toast.success("Avaliação enviada com sucesso!");
+      window.location.reload();
     } catch (error) {
       toast.error(`${error.message}`);
     } finally {
@@ -500,6 +486,7 @@ export default function CustomersPage() {
                 <div className="flex-1">
                   <h3 className="font-semibold">{barber.username}</h3>
                   <p className="text-sm text-gray-500">{barber.city}</p>
+                  <p className="text-sm text-gray-500">{barber.address}</p>
                   <div className="mt-2 flex items-center gap-1">
                     {renderStars(barber.average_rating)}
                     <span className="ml-2 text-sm text-gray-500">
@@ -636,12 +623,16 @@ export default function CustomersPage() {
                     <span className="text-sm text-gray-500">Chave PIX:</span>
                     <span className="font-medium">{appointmentDetails?.pix_key}</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Endereço:</span>
+                    <span className="font-medium">{appointmentDetails?.address}</span>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
                 <Button
                   onClick={() => {
-                    const message = `Olá ${appointmentDetails?.barber}! Gostaria de confirmar meu agendamento:\n\nServiço: ${appointmentDetails?.service}\nData: ${appointmentDetails?.date}\nHorário: ${appointmentDetails?.time}\nValor: ${appointmentDetails?.is_free && appointmentDetails?.price === 0 ? "Gratuito (Recompensa)" : formatCurrency(appointmentDetails?.price)}\n\n${appointmentDetails?.is_free && appointmentDetails?.price === 0 ? "" : `Chave PIX para pagamento: ${appointmentDetails?.pix_key}`}`;
+                    const message = `Olá ${appointmentDetails?.barber}! Gostaria de confirmar meu agendamento:\n\nServiço: ${appointmentDetails?.service}\nData: ${appointmentDetails?.date}\nHorário: ${appointmentDetails?.time}\nValor: ${appointmentDetails?.is_free && appointmentDetails?.price === 0 ? "Gratuito (Recompensa)" : formatCurrency(appointmentDetails?.price)}\nEndereço: ${appointmentDetails?.address}\n\n${appointmentDetails?.is_free && appointmentDetails?.price === 0 ? "" : `Chave PIX para pagamento: ${appointmentDetails?.pix_key}`}`;
                     const encodedMessage = encodeURIComponent(message);
                     window.open(`https://wa.me/${appointmentDetails?.whatsapp}?text=${encodedMessage}`, '_blank');
                   }}
