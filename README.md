@@ -1,11 +1,11 @@
-# MeuBarbeiro - Documentação Front-end
+# Agenda Barber - Front-end
 
 ## Autores
 - Murilo Santos
 - José Junior
 
 ## Sobre o Projeto
-O MeuBarbeiro é uma plataforma web desenvolvida para conectar barbeiros e clientes, oferecendo um sistema de agendamento simples e eficiente. O projeto visa resolver a necessidade de gestão de horários e serviços em barbearias, especialmente em cidades menores, proporcionando uma solução acessível e de fácil adoção.
+O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e clientes, oferecendo um sistema de agendamento simples e eficiente. O projeto visa resolver a necessidade de gestão de horários e serviços em barbearias, especialmente em cidades menores, proporcionando uma solução acessível e de fácil adoção.
 
 ### Objetivos
 - Facilitar o agendamento de serviços em barbearias
@@ -147,7 +147,7 @@ src/
 ### Passos para Instalação
 1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/meubarbeiro.git
+git clone https://github.com/MuriloSG/front-end-agenda-barber.git
 ```
 
 2. Instale as dependências:
