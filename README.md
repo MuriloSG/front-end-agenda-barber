@@ -24,16 +24,20 @@ O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e cli
   ![Redefinição de Senha - Desktop](/public/auth/redefinir_senha_desk.png)
 
 #### Mobile
-- **Landing Page**
-  ![Landing Page - Mobile](/public/auth/landpage_mobile.png)
-- **Login**
-  ![Login - Mobile](/public/auth/login_mobile.png)
-- **Registro**
-  ![Registro - Mobile](/public/auth/register_mobile.png)
-- **Recuperação de Senha**
-  ![Recuperação de Senha - Mobile](/public/auth/recuperar_senha_mobile.png)
-- **Redefinição de Senha**
-  ![Redefinição de Senha - Mobile](/public/auth/redefinir_senha_mobile.png)
+- **Landing Page**  
+  ![Landing Page - Mobile](/public/auth/landpage_mobile.png)  
+
+- **Login**  
+  ![Login - Mobile](/public/auth/login_mobile.png)  
+
+- **Registro**  
+  ![Registro - Mobile](/public/auth/register_mobile.png)  
+
+- **Recuperação de Senha**  
+  ![Recuperação de Senha - Mobile](/public/auth/recuperar_senha_mobile.png)  
+
+- **Redefinição de Senha**  
+  ![Redefinição de Senha - Mobile](/public/auth/redefinir_senha_mobile.png) 
 
 ### Área do Cliente
 
@@ -45,13 +49,15 @@ O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e cli
 - **Perfil**
   ![Perfil - Desktop](/public/cusmoters/perfil_desk.png)
 
-#### Mobile
-- **Página Inicial**
-  ![Página Inicial - Mobile](/public/cusmoters/inicio_mobile.png)
-- **Meus Agendamentos**
-  ![Meus Agendamentos - Mobile](/public/cusmoters/meus_agendamentos_mobile.png)
-- **Perfil**
-  ![Perfil - Mobile](/public/cusmoters/perfil_mobile.png)
+  #### Mobile
+- **Página Inicial**  
+  ![Página Inicial - Mobile](/public/cusmoters/inicio_mobile.png)  
+
+- **Meus Agendamentos**  
+  ![Meus Agendamentos - Mobile](/public/cusmoters/meus_agendamentos_mobile.png)  
+
+- **Perfil**  
+  ![Perfil - Mobile](/public/cusmoters/perfil_mobile.png) 
 
 ### Área do Barbeiro
 
@@ -68,16 +74,21 @@ O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e cli
   ![Perfil - Desktop](/public/barber/perfil_desk.png)
 
 #### Mobile
-- **Página Inicial**
-  ![Página Inicial - Mobile](/public/barber/inicio_mobile.png)
-- **Dias de Trabalho**
-  ![Dias de trabalho - Mobile](/public/barber/dias_trabalho_mobile.png)
-- **Agendamentos**
-  ![Agendamentos - Mobile](/public/barber/agendamentos_mobile.png)
-- **Serviços**
-  ![Serviços - Mobile](/public/barber/service_mobile.png)
-- **Perfil**
-  ![Perfil - Mobile](/public/barber/perfil_mobile.png)
+- **Página Inicial**  
+  ![Página Inicial - Mobile](/public/barber/inicio_mobile.png)  
+
+- **Dias de Trabalho**  
+  ![Dias de trabalho - Mobile](/public/barber/dias_trabalho_mobile.png)  
+
+- **Agendamentos**  
+  ![Agendamentos - Mobile](/public/barber/agendamentos_mobile.png)  
+
+- **Serviços**  
+  ![Serviços - Mobile](/public/barber/service_mobile.png)  
+
+- **Perfil**  
+  ![Perfil - Mobile](/public/barber/perfil_mobile.png) 
+  
 
 ## Tecnologias Utilizadas
 - **Framework**: Next.js 13+ (App Router)
