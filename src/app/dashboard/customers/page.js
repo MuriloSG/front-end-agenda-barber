@@ -485,8 +485,8 @@ export default function CustomersPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold">{barber.username}</h3>
-                  <p className="text-sm text-gray-500">{barber.city}</p>
-                  <p className="text-sm text-gray-500">{barber.address}</p>
+                  <p className="text-sm text-gray-500"><span className="font-bold">Cidade:</span> {barber.city}</p>
+                  <p className="text-sm text-gray-500"><span className="font-bold">Endereço:</span> {barber.address}</p>
                   <div className="mt-2 flex items-center gap-1">
                     {renderStars(barber.average_rating)}
                     <span className="ml-2 text-sm text-gray-500">
