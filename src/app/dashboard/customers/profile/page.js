@@ -46,7 +46,7 @@ export default function Profile() {
       username: "",
       email: "",
       city: "",
-      phone: "",
+      whatsapp: "",
     },
   });
 
@@ -60,7 +60,7 @@ export default function Profile() {
           "city",
           cities.find((c) => c.label === profile.city)?.value || ""
         );
-        setValue("phone", profile.whatsapp || "");
+        setValue("whatsapp", profile.whatsapp || "");
         if (profile.avatar) {
           setAvatarPreview(profile.avatar);
           setOriginalAvatar(profile.avatar);
@@ -91,7 +91,7 @@ export default function Profile() {
     try {
       const formData = new FormData();
       formData.append("username", data.username);
-      formData.append("whatsapp", data.phone);
+      formData.append("whatsapp", data.whatsapp);
 
       if (avatarFile && avatarFile.name !== originalAvatar?.name) {
         formData.append("avatar_file", avatarFile);
@@ -160,11 +160,11 @@ export default function Profile() {
                 className="bg-muted"
               />
 
-              <Label htmlFor="phone">WhatsApp</Label>
-              <Input id="phone" {...register("phone")} />
-              {errors.phone && (
+              <Label htmlFor="whatsapp">WhatsApp</Label>
+              <Input id="whatsapp" {...register("whatsapp")} />
+              {errors.whatsapp && (
                 <p className="text-sm text-destructive">
-                  {errors.phone.message}
+                  {errors.whatsapp.message}
                 </p>
               )}
 
@@ -185,7 +185,8 @@ export default function Profile() {
                 </SelectContent>
               </Select>
               <p className="text-sm text-muted-foreground">
-                A cidade selecionada determina quais barbeiros serão exibidos na listagem
+                A cidade selecionada determina quais barbeiros serão exibidos na
+                listagem
               </p>
               {errors.city && (
                 <p className="text-sm text-destructive">
@@ -199,7 +200,8 @@ export default function Profile() {
                   <p className="text-sm font-medium">Total de Agendamentos</p>
                   <p className="text-2xl font-bold">{appointmentsCount}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Total de agendamentos para recompensas, quando conseguir uma recompensa sera zerado
+                    Total de agendamentos para recompensas, quando conseguir uma
+                    recompensa sera zerado
                   </p>
                 </div>
               </div>

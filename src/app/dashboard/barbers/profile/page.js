@@ -46,7 +46,7 @@ export default function Profile() {
       username: "",
       email: "",
       city: "",
-      phone: "",
+      whatsapp: "",
       pix_key: "",
       address: "",
     },
@@ -62,7 +62,7 @@ export default function Profile() {
           "city",
           cities.find((c) => c.label === profile.city)?.value || ""
         );
-        setValue("phone", profile.whatsapp || "");
+        setValue("whatsapp", profile.whatsapp || "");
         setValue("pix_key", profile.pix_key || "");
         setValue("address", profile.address || "");
         if (profile.avatar) {
@@ -94,7 +94,8 @@ export default function Profile() {
     try {
       const formData = new FormData();
       formData.append("username", data.username);
-      formData.append("whatsapp", data.phone);
+      formData.append("whatsapp", data.whatsapp);
+      formData.append("city", cities.find(c => c.value === data.city)?.label || "");
       formData.append("pix_key", data.pix_key);
       formData.append("address", data.address);
 
@@ -168,11 +169,11 @@ export default function Profile() {
                 className="bg-muted"
               />
 
-              <Label htmlFor="phone">WhatsApp</Label>
-              <Input id="phone" {...register("phone")} />
-              {errors.phone && (
+              <Label htmlFor="whatsapp">WhatsApp</Label>
+              <Input id="whatsapp" {...register("whatsapp")} />
+              {errors.whatsapp && (
                 <p className="text-sm text-destructive">
-                  {errors.phone.message}
+                  {errors.whatsapp.message}
                 </p>
               )}
 
