@@ -581,7 +581,14 @@ export default function CustomersPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={confirmationDialogOpen}>
+      <Dialog 
+        open={confirmationDialogOpen} 
+        onOpenChange={(open) => {
+          if (!open) {
+            setConfirmationDialogOpen(false);
+          }
+        }}
+      >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Agendamento Confirmado!</DialogTitle>
