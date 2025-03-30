@@ -529,7 +529,7 @@ export default function CustomersPage() {
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <p className="text-lg text-gray-500">
             {searchTerm
-              ? "Nenhum barbeiro encontrado com este nome ou cidade."
+              ? "Nenhum barbeiro encontrado com este nome."
               : "Nenhum barbeiro disponível no momento."}
           </p>
         </div>
