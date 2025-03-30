@@ -13,10 +13,7 @@ export const formatCurrency = (value) => {
 };
 
 export const formatTime = (time) => {
-  return time
-    ? new Date(`1970-01-01T${time}Z`).toLocaleTimeString("pt-BR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "Horário não disponível";
+  if (!time) return "Horário não disponível";
+  const [hours, minutes] = time.split(':');
+  return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
 };
