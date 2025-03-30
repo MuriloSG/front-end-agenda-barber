@@ -28,11 +28,11 @@ src/
 │   ├── dashboard/         # Área restrita (barbeiros e clientes)
 │   │   ├── barbers/      # Área específica para barbeiros
 │   │   └── customers/    # Área específica para clientes
-│   ├── auth/             # Páginas de autenticação
-│   └── api/              # Rotas da API
+│   ├── login/            # Página de login
+│   ├── register/         # Página de registro
+│   ├── forgot-password/  # Recuperação de senha
+│   └── reset-password/   # Redefinição de senha
 ├── components/           # Componentes reutilizáveis
-│   ├── ui/              # Componentes base (shadcn)
-│   └── shared/          # Componentes compartilhados
 ├── lib/                  # Utilitários e configurações
 │   ├── api/             # Funções de API
 │   └── utils/           # Funções utilitárias
