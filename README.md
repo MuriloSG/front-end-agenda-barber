@@ -7,6 +7,79 @@
 ## Sobre o Projeto
 O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e clientes, oferecendo um sistema de agendamento simples e eficiente. O projeto visa resolver a necessidade de gestão de horários e serviços para barbeiros, especialmente em cidades menores, proporcionando uma solução acessível e de fácil adoção.
 
+## Screenshots
+
+### Autenticação e Landing Page
+
+#### Desktop
+- **Landing Page**
+  ![Landing Page - Desktop](/public/auth/landpage_desk.png)
+- **Login**
+  ![Login - Desktop](/public/auth/login_desk.png)
+- **Registro**
+  ![Registro - Desktop](/public/auth/register_desk.png)
+- **Recuperação de Senha**
+  ![Recuperação de Senha - Desktop](/public/auth/recuperar_senha_desk.png)
+- **Redefinição de Senha**
+  ![Redefinição de Senha - Desktop](/public/auth/redefinir_senha_desk.png)
+
+#### Mobile
+- **Landing Page**
+  ![Landing Page - Mobile](/public/auth/landpage_mobile.png)
+- **Login**
+  ![Login - Mobile](/public/auth/login_mobile.png)
+- **Registro**
+  ![Registro - Mobile](/public/auth/register_mobile.png)
+- **Recuperação de Senha**
+  ![Recuperação de Senha - Mobile](/public/auth/recuperar_senha_mobile.png)
+- **Redefinição de Senha**
+  ![Redefinição de Senha - Mobile](/public/auth/redefinir_senha_mobile.png)
+
+
+### Área do Cliente
+
+#### Desktop
+- **Página Inicial**
+  ![Página Inicial - Desktop](/public/cusmoters/inicio_desk.png)
+- **Meus Agendamentos**
+  ![Meus Agendamentos - Desktop](/public/cusmoters/meus_agendamentos_desk.png)
+- **Perfil**
+  ![Perfil - Desktop](/public//cusmoters/perfil_desk.png)
+
+#### Mobile
+- **Página Inicial**
+  ![Página Inicial - Mobile](/public/cusmoters/inicio_mobile.png)
+- **Meus Agendamentos**
+  ![Meus Agendamentos - Mobile](/public/cusmoters/meus_agendamentos_mobile.png)
+- **Perfil**
+  ![Perfil - Mobile](/public/cusmoters/perfil_mobile.png)
+
+### Área do Barbeiro
+
+#### Desktop
+- **Página Inicial**
+  ![Página Inicial - Desktop](/public/barber/inicio_desk.png)
+- **Dias de Trabalho**
+  ![Dias de trabalho - Desktop](/public/barber/dias_trabalho_desk.png)
+- **Agendamentos**
+  ![Agendamentos - Desktop](/public/barber/agendamentos_desk.png)
+- **Serviços**
+  ![Serviços - Desktop](/public/barber/services_desk.png)
+- **Perfil**
+  ![Perfil - Desktop](/public/barber/perfil_desk.png)
+
+#### Mobile
+- **Página Inicial**
+  ![Página Inicial - Mobile](/public/barber/inicio_mobile.png)
+-  **Dias de Trabalho**
+  ![Dias de trabalho - Mobile](/public/barber/dias_trabalho_mobile.png)
+- **Agendamentos**
+  ![Agendamentos - Mobile](/public/barber/agendamentos_mobile.png)
+- **Serviços**
+  ![Serviços - Mobile](/public/barber/service_mobile.png)
+- **Perfil**
+  ![Perfil - Mobile](/public/barber/perfil_mobile.png)
+
 ## Tecnologias Utilizadas
 - **Framework**: Next.js 13+ (App Router)
 - **Biblioteca UI**: Shadcn/UI
@@ -157,5 +230,5 @@ yarn dev
 ```
 
 ## Licença
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.g
 
