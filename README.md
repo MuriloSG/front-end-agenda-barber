@@ -5,7 +5,7 @@
 - José Junior
 
 ## Sobre o Projeto
-O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e clientes, oferecendo um sistema de agendamento simples e eficiente. O projeto visa resolver a necessidade de gestão de horários e serviços em barbearias, especialmente em cidades menores, proporcionando uma solução acessível e de fácil adoção.
+O Agenda Barber é uma plataforma web desenvolvida para conectar barbeiros e clientes, oferecendo um sistema de agendamento simples e eficiente. O projeto visa resolver a necessidade de gestão de horários e serviços para barbeiros, especialmente em cidades menores, proporcionando uma solução acessível e de fácil adoção.
 
 ## Tecnologias Utilizadas
 - **Framework**: Next.js 13+ (App Router)
